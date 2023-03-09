@@ -62,9 +62,14 @@ android {
         disable 'MissingTranslation'
         disable 'UnsafeOptInUsageError'
     }
+    buildFeatures {
+        viewBinding true
+        dataBinding true
+    }
 }
 
 dependencies {
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     def media3_version = '1.0.0-rc02'
     implementation "androidx.media3:media3-session:$media3_version"
     implementation "androidx.media3:media3-datasource:$media3_version"

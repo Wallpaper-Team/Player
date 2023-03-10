@@ -15,6 +15,8 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.brouken.player.utils.Utils;
+
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Arrays;

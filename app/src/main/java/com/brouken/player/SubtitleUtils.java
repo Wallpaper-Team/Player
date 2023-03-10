@@ -9,6 +9,7 @@ import androidx.media3.common.C;
 import androidx.media3.common.MediaItem;
 import androidx.media3.common.MimeTypes;
 
+import com.brouken.player.utils.Utils;
 import com.ibm.icu.text.CharsetDetector;
 import com.ibm.icu.text.CharsetMatch;
 
@@ -24,7 +25,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-class SubtitleUtils {
+public class SubtitleUtils {
 
     public static String getSubtitleMime(Uri uri) {
         final String path = uri.getPath();

@@ -9,6 +9,8 @@ import android.preference.PreferenceManager;
 import androidx.media3.exoplayer.DefaultRenderersFactory;
 import androidx.media3.ui.AspectRatioFrameLayout;
 
+import com.brouken.player.utils.Utils;
+
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
@@ -16,7 +18,7 @@ import java.io.ObjectOutputStream;
 import java.util.LinkedHashMap;
 import java.util.Set;
 
-class Prefs {
+public class Prefs {
     // Previously used
     // private static final String PREF_KEY_AUDIO_TRACK = "audioTrack";
     // private static final String PREF_KEY_AUDIO_TRACK_FFMPEG = "audioTrackFfmpeg";

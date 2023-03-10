@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">Just Player</string>
+    <string name="app_name" translatable="false">DK Player</string>
     <string name="video_resize_fit">Fit</string>
     <string name="video_resize_crop">Crop</string>
     <string name="video_orientation_video">Video orientation</string>
@@ -54,4 +54,16 @@
     <string name="pref_language_track_none">None</string>
     <string name="pref_language_track_device">Device languages</string>
     <string name="pref_language_track_default">Media file default</string>
+    <string name="video_player">Video Player</string>
+    <string name="music_player">Music Player</string>
+    <string name="trim_video">Trim Video</string>
+    <string name="secure_folder">Secure Folder</string>
+    <string name="video_downloader">Video Downloader</string>
+    <string name="settings">Settings</string>
+    <string name="video_player_description">Choose video for playing</string>
+    <string name="music_player_description">Choose music/mp3 file for playing</string>
+    <string name="trim_video_description">Open video for trimming</string>
+    <string name="secure_folder_description">Keep videos secured</string>
+    <string name="video_downloader_description">Enter url for downloading video</string>
+    <string name="settings_description">Personalize the player</string>
 </resources>

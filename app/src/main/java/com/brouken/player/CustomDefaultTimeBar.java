@@ -8,6 +8,8 @@ import android.view.MotionEvent;
 import androidx.annotation.Nullable;
 import androidx.media3.ui.DefaultTimeBar;
 
+import com.brouken.player.utils.Utils;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

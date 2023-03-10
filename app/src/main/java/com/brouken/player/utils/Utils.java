@@ -1,4 +1,4 @@
-package com.brouken.player;
+package com.brouken.player.utils;
 
 import static android.content.Context.UI_MODE_SERVICE;
 
@@ -49,6 +49,11 @@ import com.arthenica.ffmpegkit.FFprobeKit;
 import com.arthenica.ffmpegkit.MediaInformation;
 import com.arthenica.ffmpegkit.MediaInformationSession;
 import com.arthenica.ffmpegkit.StreamInformation;
+import com.brouken.player.BuildConfig;
+import com.brouken.player.CustomPlayerView;
+import com.brouken.player.PlayerActivity;
+import com.brouken.player.R;
+import com.brouken.player.SubtitleUtils;
 import com.obsez.android.lib.filechooser.ChooserDialog;
 
 import java.io.File;
@@ -63,14 +68,14 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-class Utils {
+public class Utils {
 
     public static final String FEATURE_FIRE_TV = "amazon.hardware.fire_tv";
 
-    public static final String[] supportedExtensionsVideo = new String[] { "3gp", "avi", "m4v", "mkv", "mov", "mp4", "ts", "webm" };
-    public static final String[] supportedExtensionsSubtitle = new String[] { "srt", "ssa", "ass", "vtt", "ttml", "dfxp", "xml" };
+    public static final String[] supportedExtensionsVideo = new String[]{"3gp", "avi", "m4v", "mkv", "mov", "mp4", "ts", "webm"};
+    public static final String[] supportedExtensionsSubtitle = new String[]{"srt", "ssa", "ass", "vtt", "ttml", "dfxp", "xml"};
 
-    public static final String[] supportedMimeTypesVideo = new String[] {
+    public static final String[] supportedMimeTypesVideo = new String[]{
             // Local mime types on Android:
             MimeTypes.VIDEO_MATROSKA, // .mkv
             MimeTypes.VIDEO_MP4, // .mp4, .m4v
@@ -82,14 +87,7 @@ class Utils {
             // For remote storages:
             "video/x-m4v", // .m4v
     };
-    public static final String[] supportedMimeTypesSubtitle = new String[] {
-            MimeTypes.APPLICATION_SUBRIP,
-            MimeTypes.TEXT_SSA,
-            MimeTypes.TEXT_VTT,
-            MimeTypes.APPLICATION_TTML,
-            "text/*",
-            "application/octet-stream"
-    };
+    public static final String[] supportedMimeTypesSubtitle = new String[]{MimeTypes.APPLICATION_SUBRIP, MimeTypes.TEXT_SSA, MimeTypes.TEXT_VTT, MimeTypes.APPLICATION_TTML, "text/*", "application/octet-stream"};
 
     public static int dpToPx(int dp) {
         return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
@@ -136,16 +134,9 @@ class Utils {
             }
         } else {
             if (show) {
-                playerView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+                playerView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
             } else {
-                playerView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
-                        | View.SYSTEM_UI_FLAG_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+                playerView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
             }
         }
     }
@@ -157,8 +148,7 @@ class Utils {
                 try (Cursor cursor = context.getContentResolver().query(uri, new String[]{OpenableColumns.DISPLAY_NAME}, null, null, null)) {
                     if (cursor != null && cursor.moveToFirst()) {
                         final int columnIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
-                        if (columnIndex > -1)
-                            result = cursor.getString(columnIndex);
+                        if (columnIndex > -1) result = cursor.getString(columnIndex);
                     }
                 }
             }
@@ -169,8 +159,7 @@ class Utils {
                     result = result.substring(cut + 1);
                 }
             }
-            if (result.indexOf(".") > 0)
-                result = result.substring(0, result.lastIndexOf("."));
+            if (result.indexOf(".") > 0) result = result.substring(0, result.lastIndexOf("."));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -189,8 +178,8 @@ class Utils {
     public static void adjustVolume(final Context context, final AudioManager audioManager, final CustomPlayerView playerView, final boolean raise, boolean canBoost, boolean clear) {
         playerView.removeCallbacks(playerView.textClearRunnable);
 
-        final int volume = getVolume(context,false, audioManager);
-        final int volumeMax = getVolume(context,true, audioManager);
+        final int volume = getVolume(context, false, audioManager);
+        final int volumeMax = getVolume(context, true, audioManager);
         boolean volumeActive = volume != 0;
 
         // Handle volume changes outside the app (lose boost if volume is not maxed out)
@@ -198,8 +187,7 @@ class Utils {
             PlayerActivity.boostLevel = 0;
         }
 
-        if (PlayerActivity.loudnessEnhancer == null)
-            canBoost = false;
+        if (PlayerActivity.loudnessEnhancer == null) canBoost = false;
 
         if (volume != volumeMax || (PlayerActivity.boostLevel == 0 && !raise)) {
             if (PlayerActivity.loudnessEnhancer != null)
@@ -219,10 +207,8 @@ class Utils {
                 playerView.setCustomErrorMessage(volumeActive ? " " + volumeNew : "");
             }
         } else {
-            if (canBoost && raise && PlayerActivity.boostLevel < 10)
-                PlayerActivity.boostLevel++;
-            else if (!raise && PlayerActivity.boostLevel > 0)
-                PlayerActivity.boostLevel--;
+            if (canBoost && raise && PlayerActivity.boostLevel < 10) PlayerActivity.boostLevel++;
+            else if (!raise && PlayerActivity.boostLevel > 0) PlayerActivity.boostLevel--;
 
             if (PlayerActivity.loudnessEnhancer != null) {
                 try {
@@ -268,7 +254,8 @@ class Utils {
                         }
                     }
                 }
-            } catch (Exception e) {}
+            } catch (Exception e) {
+            }
         }
         if (max) {
             return audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
@@ -279,10 +266,7 @@ class Utils {
 
     public static void setButtonEnabled(final Context context, final ImageButton button, final boolean enabled) {
         button.setEnabled(enabled);
-        button.setAlpha(enabled ?
-                        (float) context.getResources().getInteger(R.integer.exo_media_button_opacity_percentage_enabled) / 100 :
-                        (float) context.getResources().getInteger(R.integer.exo_media_button_opacity_percentage_disabled) / 100
-                );
+        button.setAlpha(enabled ? (float) context.getResources().getInteger(R.integer.exo_media_button_opacity_percentage_enabled) / 100 : (float) context.getResources().getInteger(R.integer.exo_media_button_opacity_percentage_disabled) / 100);
     }
 
     public static void showText(final CustomPlayerView playerView, final String text, final long timeout) {
@@ -297,9 +281,7 @@ class Utils {
     }
 
     public enum Orientation {
-        VIDEO(0, R.string.video_orientation_video),
-        SYSTEM(1, R.string.video_orientation_system),
-        UNSPECIFIED(2, R.string.video_orientation_system);
+        VIDEO(0, R.string.video_orientation_video), SYSTEM(1, R.string.video_orientation_system), UNSPECIFIED(2, R.string.video_orientation_system);
 
         public final int value;
         public final int description;
@@ -357,10 +339,8 @@ class Utils {
     }
 
     public static Rational getRational(final Format format) {
-        if (isRotated(format))
-            return new Rational(format.height, format.width);
-        else
-            return new Rational(format.width, format.height);
+        if (isRotated(format)) return new Rational(format.height, format.width);
+        else return new Rational(format.width, format.height);
     }
 
     public static String formatMilis(long time) {
@@ -373,10 +353,8 @@ class Utils {
     }
 
     public static String formatMilisSign(long time) {
-        if (time > -1000 && time < 1000)
-            return formatMilis(time);
-        else
-            return (time < 0 ? "−" : "+") + formatMilis(time);
+        if (time > -1000 && time < 1000) return formatMilis(time);
+        else return (time < 0 ? "−" : "+") + formatMilis(time);
     }
 
     public static void log(final String text) {
@@ -410,8 +388,7 @@ class Utils {
                 }
             } else if (ContentResolver.SCHEME_FILE.equals(uri.getScheme())) {
                 if (Build.VERSION.SDK_INT >= 23) {
-                    boolean hasPermission = context.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                            == PackageManager.PERMISSION_GRANTED;
+                    boolean hasPermission = context.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
                     if (!hasPermission) {
                         return false;
                     }
@@ -426,11 +403,9 @@ class Utils {
     }
 
     public static boolean isSupportedNetworkUri(final Uri uri) {
-        if (uri == null)
-            return false;
+        if (uri == null) return false;
         final String scheme = uri.getScheme();
-        if (scheme == null)
-            return false;
+        if (scheme == null) return false;
         return scheme.startsWith("http") || scheme.equals("rtsp");
     }
 
@@ -480,7 +455,7 @@ class Utils {
     }
 
     public static int normRate(float rate) {
-        return (int)(rate * 100f);
+        return (int) (rate * 100f);
     }
 
     public static boolean switchFrameRate(final PlayerActivity activity, final Uri uri, final boolean play) {
@@ -546,8 +521,7 @@ class Utils {
 
                     // Filter only resolutions same as current
                     for (Display.Mode mode : supportedModes) {
-                        if (mode.getPhysicalWidth() == activeMode.getPhysicalWidth() &&
-                                mode.getPhysicalHeight() == activeMode.getPhysicalHeight()) {
+                        if (mode.getPhysicalWidth() == activeMode.getPhysicalWidth() && mode.getPhysicalHeight() == activeMode.getPhysicalHeight()) {
                             modesResolutionCount++;
 
                             if (normRate(mode.getRefreshRate()) >= normRate(frameRate))
@@ -574,8 +548,7 @@ class Utils {
                         Window window = activity.getWindow();
                         WindowManager.LayoutParams layoutParams = window.getAttributes();
 
-                        if (modeBest == null)
-                            modeBest = modeTop;
+                        if (modeBest == null) modeBest = modeTop;
 
                         switchingModes = !(modeBest.getModeId() == activeMode.getModeId());
                         if (switchingModes) {
@@ -583,9 +556,7 @@ class Utils {
                             window.setAttributes(layoutParams);
                         }
                         if (BuildConfig.DEBUG)
-                            Toast.makeText(activity, modes + "\n" +
-                                    "Video frameRate: " + frameRate + "\n" +
-                                    "Current display refreshRate: " + modeBest.getRefreshRate(), Toast.LENGTH_LONG).show();
+                            Toast.makeText(activity, modes + "\n" + "Video frameRate: " + frameRate + "\n" + "Current display refreshRate: " + modeBest.getRefreshRate(), Toast.LENGTH_LONG).show();
                     }
                 }
             }
@@ -598,10 +569,8 @@ class Utils {
 
     private static void playIfCan(final PlayerActivity activity, boolean play) {
         if (play) {
-            if (PlayerActivity.player != null)
-                PlayerActivity.player.play();
-            if (activity.playerView != null)
-                activity.playerView.hideController();
+            if (PlayerActivity.player != null) PlayerActivity.player.play();
+            if (activity.playerView != null) activity.playerView.hideController();
         }
     }
 
@@ -615,10 +584,7 @@ class Utils {
 
         final String[] suffixes = (video ? supportedExtensionsVideo : supportedExtensionsSubtitle);
 
-        ChooserDialog chooserDialog = new ChooserDialog(activity, R.style.FileChooserStyle_Dark)
-                .withStartFile(startPath)
-                .withFilter(false, false, suffixes)
-                .withChosenListener(new ChooserDialog.Result() {
+        ChooserDialog chooserDialog = new ChooserDialog(activity, R.style.FileChooserStyle_Dark).withStartFile(startPath).withFilter(false, false, suffixes).withChosenListener(new ChooserDialog.Result() {
                     @Override
                     public void onChoosePath(String path, File pathFile) {
                         activity.releasePlayer();
@@ -644,9 +610,7 @@ class Utils {
                         dialog.cancel(); // MUST have
                     }
                 });
-        chooserDialog
-                .withOnBackPressedListener(dialog -> chooserDialog.goBack())
-                .withOnLastBackPressedListener(dialog -> dialog.cancel());
+        chooserDialog.withOnBackPressedListener(dialog -> chooserDialog.goBack()).withOnLastBackPressedListener(dialog -> dialog.cancel());
         chooserDialog.build().show();
 
         return true;
@@ -748,8 +712,7 @@ class Utils {
         }
         activity.chaptersThread = new Thread(() -> {
             MediaInformation mediaInformation = getMediaInformation(activity, uri);
-            if (mediaInformation == null)
-                return;
+            if (mediaInformation == null) return;
             final List<Chapter> chapters = mediaInformation.getChapters();
             final long[] starts = new long[chapters.size()];
             final boolean[] played = new boolean[chapters.size()];
@@ -776,7 +739,7 @@ class Utils {
         List<Map.Entry<K, V>> entries = new ArrayList<>(m.entrySet());
         Collections.sort(entries, (lhs, rhs) -> c.compare(lhs.getValue(), rhs.getValue()));
         m.clear();
-        for(Map.Entry<K, V> e : entries) {
+        for (Map.Entry<K, V> e : entries) {
             m.put(e.getKey(), e.getValue());
         }
     }

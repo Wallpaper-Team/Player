@@ -27,12 +27,12 @@ public class HomeViewModel extends ViewModel {
 
     public void loadOptions() {
         List<MainOptionMenuItem> list = new ArrayList<>();
-        list.add(new MainOptionMenuItem(R.mipmap.ic_launcher, R.string.app_name, R.string.exo_download_description));
-        list.add(new MainOptionMenuItem(R.mipmap.ic_launcher, R.string.app_name, R.string.exo_download_description));
-        list.add(new MainOptionMenuItem(R.mipmap.ic_launcher, R.string.app_name, R.string.exo_download_description));
-        list.add(new MainOptionMenuItem(R.mipmap.ic_launcher, R.string.app_name, R.string.exo_download_description));
-        list.add(new MainOptionMenuItem(R.mipmap.ic_launcher, R.string.app_name, R.string.exo_download_description));
-        list.add(new MainOptionMenuItem(R.mipmap.ic_launcher, R.string.app_name, R.string.exo_download_description));
+        list.add(new MainOptionMenuItem(R.drawable.multimedia, R.string.video_player, R.string.video_player_description));
+        list.add(new MainOptionMenuItem(R.drawable.musical, R.string.music_player, R.string.music_player_description));
+        list.add(new MainOptionMenuItem(R.drawable.trim, R.string.trim_video, R.string.trim_video_description));
+        list.add(new MainOptionMenuItem(R.drawable.padlock, R.string.secure_folder, R.string.secure_folder_description));
+        list.add(new MainOptionMenuItem(R.drawable.video_player, R.string.video_downloader, R.string.video_downloader_description));
+        list.add(new MainOptionMenuItem(R.drawable.cogwheel, R.string.settings, R.string.settings_description));
         _options.postValue(list);
     }
 }

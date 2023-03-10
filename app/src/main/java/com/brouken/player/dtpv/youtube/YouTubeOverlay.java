@@ -21,7 +21,7 @@ import androidx.core.widget.TextViewCompat;
 import androidx.media3.exoplayer.ExoPlayer;
 import androidx.media3.exoplayer.SeekParameters;
 
-import com.brouken.player.PlayerActivity;
+import com.brouken.player.screens.player.PlayerActivity;
 import com.brouken.player.R;
 import com.brouken.player.dtpv.DoubleTapPlayerView;
 import com.brouken.player.dtpv.PlayerDoubleTapListener;

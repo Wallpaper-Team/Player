@@ -18,6 +18,12 @@ import java.io.ObjectOutputStream;
 import java.util.LinkedHashMap;
 import java.util.Set;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+import dagger.hilt.android.qualifiers.ApplicationContext;
+
+@Singleton
 public class Prefs {
     // Previously used
     // private static final String PREF_KEY_AUDIO_TRACK = "audioTrack";
@@ -88,6 +94,7 @@ public class Prefs {
     public boolean persistentMode = true;
     public long nonPersitentPosition = -1L;
 
+    @Inject
     public Prefs(Context context) {
         mContext = context;
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -150,14 +157,10 @@ public class Prefs {
 
         if (persistentMode) {
             final SharedPreferences.Editor sharedPreferencesEditor = mSharedPreferences.edit();
-            if (mediaUri == null)
-                sharedPreferencesEditor.remove(PREF_KEY_MEDIA_URI);
-            else
-                sharedPreferencesEditor.putString(PREF_KEY_MEDIA_URI, mediaUri.toString());
-            if (mediaType == null)
-                sharedPreferencesEditor.remove(PREF_KEY_MEDIA_TYPE);
-            else
-                sharedPreferencesEditor.putString(PREF_KEY_MEDIA_TYPE, mediaType);
+            if (mediaUri == null) sharedPreferencesEditor.remove(PREF_KEY_MEDIA_URI);
+            else sharedPreferencesEditor.putString(PREF_KEY_MEDIA_URI, mediaUri.toString());
+            if (mediaType == null) sharedPreferencesEditor.remove(PREF_KEY_MEDIA_TYPE);
+            else sharedPreferencesEditor.putString(PREF_KEY_MEDIA_TYPE, mediaType);
             sharedPreferencesEditor.apply();
         }
     }
@@ -167,21 +170,17 @@ public class Prefs {
         subtitleTrackId = null;
         if (persistentMode) {
             final SharedPreferences.Editor sharedPreferencesEditor = mSharedPreferences.edit();
-            if (uri == null)
-                sharedPreferencesEditor.remove(PREF_KEY_SUBTITLE_URI);
-            else
-                sharedPreferencesEditor.putString(PREF_KEY_SUBTITLE_URI, uri.toString());
+            if (uri == null) sharedPreferencesEditor.remove(PREF_KEY_SUBTITLE_URI);
+            else sharedPreferencesEditor.putString(PREF_KEY_SUBTITLE_URI, uri.toString());
             sharedPreferencesEditor.remove(PREF_KEY_SUBTITLE_TRACK_ID);
             sharedPreferencesEditor.apply();
         }
     }
 
     public void updatePosition(final long position) {
-        if (mediaUri == null)
-            return;
+        if (mediaUri == null) return;
 
-        while (positions.size() > 100)
-            positions.remove(positions.keySet().toArray()[0]);
+        while (positions.size() > 100) positions.remove(positions.keySet().toArray()[0]);
 
         if (persistentMode) {
             positions.put(mediaUri.toString(), position);
@@ -245,14 +244,12 @@ public class Prefs {
         }
 
         Object val = positions.get(mediaUri.toString());
-        if (val != null)
-            return (long) val;
+        if (val != null) return (long) val;
 
         // Return position for uri from limited scope (loaded after using Next action)
         if (ContentResolver.SCHEME_CONTENT.equals(mediaUri.getScheme())) {
             final String searchPath = SubtitleUtils.getTrailPathFromUri(mediaUri);
-            if (searchPath == null || searchPath.length() < 1)
-                return 0L;
+            if (searchPath == null || searchPath.length() < 1) return 0L;
             final Set<String> keySet = positions.keySet();
             final Object[] keys = keySet.toArray();
             for (int i = keys.length; i > 0; i--) {
@@ -284,14 +281,10 @@ public class Prefs {
         this.speed = speed;
         if (persistentMode) {
             final SharedPreferences.Editor sharedPreferencesEditor = mSharedPreferences.edit();
-            if (audioTrackId == null)
-                sharedPreferencesEditor.remove(PREF_KEY_AUDIO_TRACK_ID);
-            else
-                sharedPreferencesEditor.putString(PREF_KEY_AUDIO_TRACK_ID, audioTrackId);
-            if (subtitleTrackId == null)
-                sharedPreferencesEditor.remove(PREF_KEY_SUBTITLE_TRACK_ID);
-            else
-                sharedPreferencesEditor.putString(PREF_KEY_SUBTITLE_TRACK_ID, subtitleTrackId);
+            if (audioTrackId == null) sharedPreferencesEditor.remove(PREF_KEY_AUDIO_TRACK_ID);
+            else sharedPreferencesEditor.putString(PREF_KEY_AUDIO_TRACK_ID, audioTrackId);
+            if (subtitleTrackId == null) sharedPreferencesEditor.remove(PREF_KEY_SUBTITLE_TRACK_ID);
+            else sharedPreferencesEditor.putString(PREF_KEY_SUBTITLE_TRACK_ID, subtitleTrackId);
             sharedPreferencesEditor.putInt(PREF_KEY_RESIZE_MODE, resizeMode);
             sharedPreferencesEditor.putFloat(PREF_KEY_SCALE, scale);
             sharedPreferencesEditor.putFloat(PREF_KEY_SPEED, speed);
@@ -302,10 +295,8 @@ public class Prefs {
     public void updateScope(final Uri uri) {
         scopeUri = uri;
         final SharedPreferences.Editor sharedPreferencesEditor = mSharedPreferences.edit();
-        if (uri == null)
-            sharedPreferencesEditor.remove(PREF_KEY_SCOPE_URI);
-        else
-            sharedPreferencesEditor.putString(PREF_KEY_SCOPE_URI, uri.toString());
+        if (uri == null) sharedPreferencesEditor.remove(PREF_KEY_SCOPE_URI);
+        else sharedPreferencesEditor.putString(PREF_KEY_SCOPE_URI, uri.toString());
         sharedPreferencesEditor.apply();
     }
 

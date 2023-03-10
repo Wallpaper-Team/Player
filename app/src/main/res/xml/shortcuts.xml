@@ -7,6 +7,6 @@
         <intent
             android:action="com.brouken.player.action.SHORTCUT_VIDEOS"
             android:targetPackage="com.brouken.player"
-            android:targetClass="com.brouken.player.PlayerActivity" />
+            android:targetClass="com.brouken.player.screens.player.PlayerActivity" />
     </shortcut>
 </shortcuts>

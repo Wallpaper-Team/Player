@@ -1,14 +1,12 @@
 package com.brouken.player.screens.home;
 
+import android.content.Intent;
+import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-
-import com.brouken.player.PlayerActivity;
-import com.brouken.player.R;
+import com.brouken.player.screens.player.PlayerActivity;
 import com.brouken.player.databinding.ActivityHomeBinding;
 import com.brouken.player.screens.home.view.MainOptionAdapter;
 import com.brouken.player.screens.home.viewmodel.HomeViewModel;
@@ -33,9 +31,11 @@ public class HomeActivity extends AppCompatActivity {
 
         mHomeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
         mHomeViewModel.options.observe(this, options -> {
-            Log.d("Ducky", "onCreate: " + options.size());
             mAdapter.setOptions(options);
         });
         mBinding.setAdapter(mAdapter);
+        mBinding.fbt.setOnClickListener(v -> {
+            startActivity(new Intent(this, PlayerActivity.class));
+        });
     }
 }

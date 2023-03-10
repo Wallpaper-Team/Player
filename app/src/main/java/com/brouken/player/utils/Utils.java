@@ -51,7 +51,8 @@ import com.arthenica.ffmpegkit.MediaInformationSession;
 import com.arthenica.ffmpegkit.StreamInformation;
 import com.brouken.player.BuildConfig;
 import com.brouken.player.CustomPlayerView;
-import com.brouken.player.PlayerActivity;
+import com.brouken.player.screens.player.PlayerActivity;
+import com.brouken.player.Prefs;
 import com.brouken.player.R;
 import com.brouken.player.SubtitleUtils;
 import com.obsez.android.lib.filechooser.ChooserDialog;
@@ -574,7 +575,7 @@ public class Utils {
         }
     }
 
-    public static boolean alternativeChooser(PlayerActivity activity, Uri initialUri, boolean video) {
+    public static boolean alternativeChooser(Prefs prefs, PlayerActivity activity, Uri initialUri, boolean video) {
         String startPath;
         if (initialUri != null && (new File(initialUri.getSchemeSpecificPart())).exists()) {
             startPath = initialUri.getSchemeSpecificPart();
@@ -590,15 +591,15 @@ public class Utils {
                         activity.releasePlayer();
                         Uri uri = DocumentFile.fromFile(pathFile).getUri();
                         if (video) {
-                            activity.mPrefs.setPersistent(true);
-                            activity.mPrefs.updateMedia(activity, uri, null);
+                            prefs.setPersistent(true);
+                            prefs.updateMedia(activity, uri, null);
                             activity.searchSubtitles();
                         } else {
                             // Convert subtitles to UTF-8 if necessary
                             SubtitleUtils.clearCache(activity);
-                            uri = SubtitleUtils.convertToUTF(activity, uri);
+                            uri = SubtitleUtils.convertToUTF(activity, uri, prefs);
 
-                            activity.mPrefs.updateSubtitle(uri);
+                            prefs.updateSubtitle(uri);
                         }
                         PlayerActivity.focusPlay = true;
                         activity.initializePlayer();

@@ -3,7 +3,7 @@ package com.brouken.player;
 import android.app.Activity;
 import android.view.WindowManager;
 
-class BrightnessControl {
+public class BrightnessControl {
 
     private final Activity activity;
 
@@ -47,7 +47,7 @@ class BrightnessControl {
         }
     }
 
-    float levelToBrightness(final int level) {
+    public float levelToBrightness(final int level) {
         final double d = 0.064 + 0.936 / (double) 30 * (double) level;
         return (float) (d * d);
     }

@@ -1,4 +1,4 @@
-package com.brouken.player;
+package com.brouken.player.screens.settings;
 
 import android.graphics.Color;
 import android.os.Build;
@@ -15,6 +15,8 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.brouken.player.Prefs;
+import com.brouken.player.R;
 import com.brouken.player.utils.Utils;
 
 import java.text.Collator;

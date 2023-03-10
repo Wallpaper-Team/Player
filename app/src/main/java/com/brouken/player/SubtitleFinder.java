@@ -4,6 +4,7 @@ import android.net.Uri;
 
 import androidx.media3.common.util.Util;
 
+import com.brouken.player.screens.player.PlayerActivity;
 import com.brouken.player.utils.Utils;
 
 import java.util.ArrayList;
@@ -17,10 +18,12 @@ public class SubtitleFinder {
     private Uri baseUri;
     private String path;
     private final List<Uri> urls;
+    private final Prefs mPrefs;
 
-    public SubtitleFinder(PlayerActivity activity, Uri uri) {
+    public SubtitleFinder(PlayerActivity activity, Uri uri, Prefs mPrefs) {
         this.activity = activity;
         path = uri.getPath();
+        this.mPrefs = mPrefs;
         path = path.substring(0, path.lastIndexOf('.'));
         baseUri = uri;
         urls = new ArrayList<>();
@@ -58,7 +61,7 @@ public class SubtitleFinder {
         }
         urls.add(buildUri("vtt"));
 
-        SubtitleFetcher subtitleFetcher = new SubtitleFetcher(activity, urls);
+        SubtitleFetcher subtitleFetcher = new SubtitleFetcher(activity, urls, mPrefs);
         subtitleFetcher.start();
     }
 

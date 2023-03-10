@@ -9,6 +9,7 @@ import androidx.media3.common.C;
 import androidx.media3.common.MediaItem;
 import androidx.media3.common.MimeTypes;
 
+import com.brouken.player.screens.player.PlayerActivity;
 import com.brouken.player.utils.Utils;
 import com.ibm.icu.text.CharsetDetector;
 import com.ibm.icu.text.CharsetMatch;
@@ -276,13 +277,13 @@ public class SubtitleUtils {
         }
     }
 
-    public static Uri convertToUTF(PlayerActivity activity, Uri subtitleUri) {
+    public static Uri convertToUTF(PlayerActivity activity, Uri subtitleUri, Prefs mPrefs) {
         try {
             String scheme = subtitleUri.getScheme();
             if (scheme != null && scheme.toLowerCase().startsWith("http")) {
                 List<Uri> urls = new ArrayList<>();
                 urls.add(subtitleUri);
-                SubtitleFetcher subtitleFetcher = new SubtitleFetcher(activity, urls);
+                SubtitleFetcher subtitleFetcher = new SubtitleFetcher(activity, urls, mPrefs);
                 subtitleFetcher.start();
                 return null;
             } else {

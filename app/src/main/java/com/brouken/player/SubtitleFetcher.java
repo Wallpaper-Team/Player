@@ -6,6 +6,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.media3.common.MediaItem;
 
+import com.brouken.player.screens.player.PlayerActivity;
 import com.brouken.player.utils.Utils;
 
 import java.io.IOException;
@@ -14,6 +15,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
+
+import javax.inject.Inject;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -30,10 +33,12 @@ class SubtitleFetcher {
     private final List<Uri> urls;
     private Uri subtitleUri;
     private final List<Uri> foundUrls;
+    private final Prefs mPrefs;
 
-    public SubtitleFetcher(PlayerActivity activity, List<Uri> urls) {
+    public SubtitleFetcher(PlayerActivity activity, List<Uri> urls, Prefs mPrefs) {
         this.activity = activity;
         this.urls = urls;
+        this.mPrefs = mPrefs;
         this.foundUrls = new ArrayList<>();
     }
 
@@ -117,7 +122,7 @@ class SubtitleFetcher {
                 }
 
                 activity.runOnUiThread(() -> {
-                    activity.mPrefs.updateSubtitle(convertedSubtitleUri);
+                    mPrefs.updateSubtitle(convertedSubtitleUri);
                     if (PlayerActivity.player != null) {
                         MediaItem mediaItem = PlayerActivity.player.getCurrentMediaItem();
                         if (mediaItem != null) {

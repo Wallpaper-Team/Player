@@ -6,7 +6,7 @@ import androidx.media3.common.Format;
 import androidx.media3.common.MimeTypes;
 import androidx.media3.ui.DefaultTrackNameProvider;
 
-class CustomDefaultTrackNameProvider extends DefaultTrackNameProvider {
+public class CustomDefaultTrackNameProvider extends DefaultTrackNameProvider {
     public CustomDefaultTrackNameProvider(Resources resources) {
         super(resources);
     }

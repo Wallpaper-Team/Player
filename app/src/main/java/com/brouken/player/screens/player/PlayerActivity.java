@@ -269,10 +269,6 @@ public class PlayerActivity extends AppCompatActivity {
         final Intent launchIntent = getIntent();
         final String action = launchIntent.getAction();
         final String type = launchIntent.getType();
-        int openFile = launchIntent.getIntExtra("openFile", 0);
-        if (openFile == 1) {
-            openFile(mPrefs.mediaUri);
-        }
 
         if ("com.brouken.player.action.SHORTCUT_VIDEOS".equals(action)) {
             openFile(Utils.getMoviesFolderUri());

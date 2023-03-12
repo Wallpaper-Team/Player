@@ -88,6 +88,24 @@ public class Utils {
             // For remote storages:
             "video/x-m4v", // .m4v
     };
+    public static final String[] supportedMimeTypesAudio = new String[]{
+            // Local mime types on Android:
+            MimeTypes.AUDIO_WAV, // .wav
+            MimeTypes.AUDIO_VORBIS, //vorbis
+            MimeTypes.AUDIO_OPUS, //opus
+            MimeTypes.AUDIO_FLAC, //flac
+            MimeTypes.AUDIO_ALAC, //alac
+            MimeTypes.AUDIO_MP4, //mp4
+            MimeTypes.AUDIO_DTS, //dts
+            MimeTypes.AUDIO_DTS_HD, //dts_hd
+            MimeTypes.AUDIO_AAC, //aac
+            MimeTypes.AUDIO_TRUEHD, //trueHD
+            MimeTypes.AUDIO_AC3, //ac3
+            MimeTypes.AUDIO_E_AC3, //e_ac3
+            MimeTypes.AUDIO_AMR, //amr
+            MimeTypes.AUDIO_MPEG, //mp3
+            "mp3", //amr
+    };
     public static final String[] supportedMimeTypesSubtitle = new String[]{MimeTypes.APPLICATION_SUBRIP, MimeTypes.TEXT_SSA, MimeTypes.TEXT_VTT, MimeTypes.APPLICATION_TTML, "text/*", "application/octet-stream"};
 
     public static int dpToPx(int dp) {
@@ -606,10 +624,8 @@ public class Utils {
                     }
                 })
                 // to handle the back key pressed or clicked outside the dialog:
-                .withOnCancelListener(new DialogInterface.OnCancelListener() {
-                    public void onCancel(DialogInterface dialog) {
-                        dialog.cancel(); // MUST have
-                    }
+                .withOnCancelListener(dialog -> {
+                    dialog.cancel(); // MUST have
                 });
         chooserDialog.withOnBackPressedListener(dialog -> chooserDialog.goBack()).withOnLastBackPressedListener(dialog -> dialog.cancel());
         chooserDialog.build().show();
@@ -631,6 +647,19 @@ public class Utils {
             final String authority = "com.android.externalstorage.documents";
             final String documentId = "primary:" + Environment.DIRECTORY_MOVIES;
             uri = DocumentsContract.buildDocumentUri(authority, documentId);
+        }
+        return uri;
+    }
+
+    public static Uri getAudioFolderUri() {
+        Uri uri = null;
+        if (Build.VERSION.SDK_INT >= 26) {
+            final String authority = "com.android.externalstorage.documents";
+            final String documentId;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                documentId = "primary:" + Environment.DIRECTORY_RECORDINGS;
+                uri = DocumentsContract.buildDocumentUri(authority, documentId);
+            }
         }
         return uri;
     }

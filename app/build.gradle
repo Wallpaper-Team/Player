@@ -9,18 +9,18 @@ android {
     ndkVersion '21.4.7075529'
 
     defaultConfig {
-        applicationId "com.brouken.player"
+        applicationId "com.ducky.videoplayer.dk"
         minSdkVersion 21
         targetSdkVersion 33
-        versionCode 139
+        versionCode 1
         versionName "0.${versionCode}"
-        archivesBaseName = "Just.Player.v${versionName}"
+        archivesBaseName = "DK.Player.v${versionName}"
     }
 
     buildTypes {
         release {
             minifyEnabled false
-            //proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
     flavorDimensions "targetSdk", "distribution"
@@ -104,4 +104,5 @@ dependencies {
     //
     implementation 'com.google.dagger:hilt-android:2.45'
     annotationProcessor 'com.google.dagger:hilt-compiler:2.45'
+    implementation "androidx.biometric:biometric:1.1.0"
 }

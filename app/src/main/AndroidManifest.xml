@@ -45,6 +45,9 @@
         tools:replace="android:allowBackup"
         tools:targetApi="n">
         <activity
+            android:name=".screens.secure.SecureFolderActivity"
+            android:exported="false" />
+        <activity
             android:name=".screens.home.HomeActivity"
             android:exported="true">
             <intent-filter>

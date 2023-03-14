@@ -66,4 +66,8 @@
     <string name="secure_folder_description">Keep videos secured</string>
     <string name="video_downloader_description">Enter url for downloading video</string>
     <string name="settings_description">Personalize the player</string>
+    <string name="request_biometric_dialog_title">Biometric for secure folder</string>
+    <string name="request_biometric_dialog_message">Please set up biometric for enable  secure folder, do you agree?</string>
+    <string name="biometric_prompt_title">Biometric for open secure folder</string>
+    <string name="biometric_prompt_subtitle">Open securefolder by using your biometric credential</string>
 </resources>

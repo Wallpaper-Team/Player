@@ -9,6 +9,7 @@ import android.app.UiModeManager;
 import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -69,6 +70,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import dagger.hilt.android.qualifiers.ApplicationContext;
+
 public class Utils {
 
     public static final String FEATURE_FIRE_TV = "amazon.hardware.fire_tv";
@@ -106,6 +109,14 @@ public class Utils {
             MimeTypes.AUDIO_MPEG, //mp3
             "mp3", //amr
     };
+
+    public static boolean isVideoOrAudioSupported(Context context, File file) {
+        String type = context.getContentResolver().getType(Uri.parse(file.getAbsolutePath()));
+        if (type == null) {
+            return false;
+        }
+        return type.startsWith("audio") || type.startsWith("video");
+    }
     public static final String[] supportedMimeTypesSubtitle = new String[]{MimeTypes.APPLICATION_SUBRIP, MimeTypes.TEXT_SSA, MimeTypes.TEXT_VTT, MimeTypes.APPLICATION_TTML, "text/*", "application/octet-stream"};
 
     public static int dpToPx(int dp) {
@@ -617,7 +628,7 @@ public class Utils {
                             SubtitleUtils.clearCache(activity);
                             uri = SubtitleUtils.convertToUTF(activity, uri, prefs);
 
-                            prefs.updateSubtitle(uri);
+                            prefs.updateSubtitle(uri);//https://youtu.be/gaT23Z6tdNA
                         }
                         PlayerActivity.focusPlay = true;
                         activity.initializePlayer();
@@ -772,5 +783,15 @@ public class Utils {
         for (Map.Entry<K, V> e : entries) {
             m.put(e.getKey(), e.getValue());
         }
+    }
+
+    public static String getPrivateFolder(Context context) {
+        ContextWrapper c = new ContextWrapper(context);
+        String path = c.getFilesDir().getPath();
+        File ret = new File(path);
+        if (!ret.exists()) {
+            ret.mkdirs();
+        }
+        return path;
     }
 }

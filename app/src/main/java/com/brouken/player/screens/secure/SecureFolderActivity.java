@@ -10,30 +10,41 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.biometric.BiometricManager;
 import androidx.biometric.BiometricPrompt;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.ViewModelProvider;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.Settings;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.brouken.player.R;
 import com.brouken.player.databinding.ActivitySecureFolderBinding;
+import com.brouken.player.screens.secure.view.FolderAdapter;
+import com.brouken.player.screens.secure.viewmodel.SecureFolderViewModel;
 import com.brouken.player.utils.Constants;
+import com.brouken.player.utils.Utils;
 
+import java.io.File;
 import java.util.concurrent.Executor;
+
+import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class SecureFolderActivity extends AppCompatActivity {
+public class SecureFolderActivity extends AppCompatActivity implements FolderAdapter.ItemOnClickListener {
 
     private static final String TAG = "SecureFolderActivity";
     private ActivitySecureFolderBinding mBinding;
     private Executor executor;
     private BiometricPrompt biometricPrompt;
     private BiometricPrompt.PromptInfo promptInfo;
+
+    @Inject
+    FolderAdapter mAdapter;
+    private SecureFolderViewModel mViewModel;
 
     private void checkAuthentication() {
         BiometricManager biometricManager = BiometricManager.from(this);
@@ -113,6 +124,12 @@ public class SecureFolderActivity extends AppCompatActivity {
         mBinding = ActivitySecureFolderBinding.inflate(getLayoutInflater());
         setContentView(mBinding.getRoot());
         checkAuthentication();
+        mAdapter.setListener(this);
+        mBinding.setAdapter(mAdapter);
+        mViewModel = new ViewModelProvider(this).get(SecureFolderViewModel.class);
+        mViewModel.setContext(this);
+        mViewModel.load(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS));
+        mViewModel.files.observe(this, files -> mAdapter.setItems(files));
     }
 
     @Override
@@ -125,5 +142,11 @@ public class SecureFolderActivity extends AppCompatActivity {
                 finish();
             }
         }
+    }
+
+    @Override
+    public void onClick(File item) {
+        //TODO
+        Toast.makeText(this, "Not implemented yet", Toast.LENGTH_SHORT).show();
     }
 }

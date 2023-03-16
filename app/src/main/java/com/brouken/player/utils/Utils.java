@@ -4,13 +4,11 @@ import static android.content.Context.UI_MODE_SERVICE;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.UiModeManager;
 import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.ContextWrapper;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
@@ -39,6 +37,7 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.documentfile.provider.DocumentFile;
 import androidx.media3.common.Format;
 import androidx.media3.common.MimeTypes;
@@ -52,10 +51,10 @@ import com.arthenica.ffmpegkit.MediaInformationSession;
 import com.arthenica.ffmpegkit.StreamInformation;
 import com.brouken.player.BuildConfig;
 import com.brouken.player.CustomPlayerView;
-import com.brouken.player.screens.player.PlayerActivity;
 import com.brouken.player.Prefs;
 import com.brouken.player.R;
 import com.brouken.player.SubtitleUtils;
+import com.brouken.player.screens.player.PlayerActivity;
 import com.obsez.android.lib.filechooser.ChooserDialog;
 
 import java.io.File;
@@ -69,8 +68,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
-import dagger.hilt.android.qualifiers.ApplicationContext;
 
 public class Utils {
 
@@ -149,7 +146,7 @@ public class Utils {
         }
     }
 
-    public static void toggleSystemUi(final Activity activity, final CustomPlayerView playerView, final boolean show) {
+    public static void toggleSystemUi(final AppCompatActivity activity, final CustomPlayerView playerView, final boolean show) {
         if (Build.VERSION.SDK_INT >= 31) {
             Window window = activity.getWindow();
             if (window != null) {
@@ -323,7 +320,7 @@ public class Utils {
     }
 
     @SuppressLint("SourceLockedOrientationActivity")
-    public static void setOrientation(Activity activity, Orientation orientation) {
+    public static void setOrientation(AppCompatActivity activity, Orientation orientation) {
         switch (orientation) {
             case VIDEO:
                 if (PlayerActivity.player != null) {
@@ -728,7 +725,7 @@ public class Utils {
         return Math.max(min, Math.min(scaleFactor, 2.0f));
     }
 
-    private static MediaInformation getMediaInformation(final Activity activity, final Uri uri) {
+    private static MediaInformation getMediaInformation(final AppCompatActivity activity, final Uri uri) {
         String path;
         if (ContentResolver.SCHEME_CONTENT.equals(uri.getScheme())) {
             try {

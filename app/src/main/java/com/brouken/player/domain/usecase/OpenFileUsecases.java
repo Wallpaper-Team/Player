@@ -3,7 +3,6 @@ package com.brouken.player.domain.usecase;
 import static com.brouken.player.utils.Constants.REQUEST_CHOOSER_AUDIO;
 import static com.brouken.player.utils.Constants.REQUEST_CHOOSER_VIDEO;
 
-import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +10,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.DocumentsContract;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.brouken.player.Prefs;
 import com.brouken.player.R;
@@ -75,7 +76,7 @@ public class OpenFileUsecases {
     private void safelyStartActivityForResult(final Intent intent, final int code) {
         if (intent.resolveActivity(mContext.getPackageManager()) == null)
             Toast.makeText(mContext, mContext.getText(R.string.error_files_missing), Toast.LENGTH_SHORT).show();
-        else ((Activity) mContext).startActivityForResult(intent, code);
+        else ((AppCompatActivity) mContext).startActivityForResult(intent, code);
     }
 
     private Intent createBaseFileIntent(final String action, final Uri initialUri) {

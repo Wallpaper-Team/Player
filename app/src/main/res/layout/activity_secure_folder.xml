@@ -22,7 +22,7 @@
             android:adapter="@{adapter}"
             android:orientation="vertical"
             android:padding="5dp"
-            app:spanCount="3"
+            app:spanCount="@integer/span_count_file_in_a_row_secure_folder"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

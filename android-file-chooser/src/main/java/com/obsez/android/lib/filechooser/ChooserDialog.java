@@ -1,8 +1,10 @@
 package com.obsez.android.lib.filechooser;
 
+import static androidx.appcompat.widget.ListPopupWindow.MATCH_PARENT;
+import static androidx.appcompat.widget.ListPopupWindow.WRAP_CONTENT;
+import static com.obsez.android.lib.filechooser.internals.FileUtil.NewFolderFilter;
+
 import android.Manifest;
-import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.TypedArray;
@@ -30,9 +32,11 @@ import androidx.annotation.RequiresApi;
 import androidx.annotation.StringRes;
 import androidx.annotation.StyleRes;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.ViewCompat;
+import androidx.fragment.app.Fragment;
 
 import com.obsez.android.lib.filechooser.internals.ExtFileFilter;
 import com.obsez.android.lib.filechooser.internals.FileUtil;
@@ -52,10 +56,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import static androidx.appcompat.widget.ListPopupWindow.MATCH_PARENT;
-import static androidx.appcompat.widget.ListPopupWindow.WRAP_CONTENT;
-import static com.obsez.android.lib.filechooser.internals.FileUtil.NewFolderFilter;
-
 /**
  * Created by coco on 6/7/15.
  */
@@ -71,7 +71,7 @@ public class ChooserDialog implements AdapterView.OnItemClickListener, DialogInt
         init(fileChooserTheme);
     }
 
-    public ChooserDialog(Activity activity, @StyleRes int fileChooserTheme) {
+    public ChooserDialog(AppCompatActivity activity, @StyleRes int fileChooserTheme) {
         this._context = activity;
         init(fileChooserTheme);
     }
@@ -86,7 +86,7 @@ public class ChooserDialog implements AdapterView.OnItemClickListener, DialogInt
         init();
     }
 
-    public ChooserDialog(Activity activity) {
+    public ChooserDialog(AppCompatActivity activity) {
         this._context = activity;
         init();
     }

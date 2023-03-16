@@ -1,8 +1,6 @@
 package com.brouken.player;
 
 import android.Manifest;
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.ContentUris;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -15,6 +13,8 @@ import android.provider.MediaStore;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -23,7 +23,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class MediaStoreChooserActivity extends Activity {
+public class MediaStoreChooserActivity extends AppCompatActivity {
 
     public static final String BUCKET_ID = "BUCKET_ID";
     public static final String SUBTITLES = "SUBTITLES";

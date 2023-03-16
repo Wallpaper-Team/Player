@@ -1,9 +1,9 @@
 package com.brouken.player;
 
-import android.app.Application;
+import com.example.file_explorer.app.FilesApplication;
 
 import dagger.hilt.android.HiltAndroidApp;
 
 @HiltAndroidApp
-public class PlayerApplication extends Application {
+public class PlayerApplication extends FilesApplication {
 }

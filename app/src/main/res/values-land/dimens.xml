@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="span_count_file_in_a_row_secure_folder">4</integer>
+</resources>

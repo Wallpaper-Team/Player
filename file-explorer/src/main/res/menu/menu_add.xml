@@ -1,0 +1,14 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.file_explorer.activities.FileExActivity">
+    <item
+        android:orderInCategory="000"
+        android:id="@+id/action_addstorage"
+        android:title="@string/add_bookmark_from_from_storage" />
+    <item
+        android:id="@+id/action_addsaf"
+        android:orderInCategory="100"
+        android:title="@string/add_bookmark_from_saf"
+        app:showAsAction="never" />
+</menu>

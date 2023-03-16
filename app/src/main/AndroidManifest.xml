@@ -28,6 +28,9 @@
         </intent>
     </queries>
 
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION" />
+
     <application
         android:name=".PlayerApplication"
         android:allowBackup="false"
@@ -42,7 +45,7 @@
         android:requestLegacyExternalStorage="true"
         android:supportsRtl="true"
         android:theme="@style/Theme.Player"
-        tools:replace="android:allowBackup"
+        tools:replace="name, allowBackup, theme"
         tools:targetApi="n">
         <activity
             android:name=".screens.secure.SecureFolderActivity"

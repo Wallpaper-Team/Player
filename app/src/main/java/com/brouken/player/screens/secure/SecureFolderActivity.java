@@ -3,6 +3,8 @@ package com.brouken.player.screens.secure;
 import static androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG;
 import static androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -12,7 +14,9 @@ import androidx.biometric.BiometricPrompt;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
@@ -24,7 +28,6 @@ import com.brouken.player.databinding.ActivitySecureFolderBinding;
 import com.brouken.player.screens.secure.view.FolderAdapter;
 import com.brouken.player.screens.secure.viewmodel.SecureFolderViewModel;
 import com.brouken.player.utils.Constants;
-import com.brouken.player.utils.Utils;
 
 import java.io.File;
 import java.util.concurrent.Executor;
@@ -46,7 +49,8 @@ public class SecureFolderActivity extends AppCompatActivity implements FolderAda
     FolderAdapter mAdapter;
     private SecureFolderViewModel mViewModel;
 
-    private void checkAuthentication() {
+    private void checkAuthentication(Boolean authenticated) {
+        if (authenticated) return;
         BiometricManager biometricManager = BiometricManager.from(this);
         switch (biometricManager.canAuthenticate(BIOMETRIC_STRONG | DEVICE_CREDENTIAL)) {
             case BiometricManager.BIOMETRIC_SUCCESS:
@@ -82,6 +86,7 @@ public class SecureFolderActivity extends AppCompatActivity implements FolderAda
             @Override
             public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
                 super.onAuthenticationSucceeded(result);
+                mViewModel.setAuthenticated(true);
                 Toast.makeText(getApplicationContext(), "Authentication succeeded!", Toast.LENGTH_SHORT).show();
             }
 
@@ -101,6 +106,16 @@ public class SecureFolderActivity extends AppCompatActivity implements FolderAda
                 .build();
         biometricPrompt.authenticate(promptInfo);
     }
+
+    private ActivityResultLauncher<String> requestPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+                if (isGranted) {
+                    mViewModel.load(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS));
+                } else {
+                    Toast.makeText(this, "Permission denied!", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+            });
 
     private void showDialogToRequestBiometric() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -123,13 +138,27 @@ public class SecureFolderActivity extends AppCompatActivity implements FolderAda
         super.onCreate(savedInstanceState);
         mBinding = ActivitySecureFolderBinding.inflate(getLayoutInflater());
         setContentView(mBinding.getRoot());
-        checkAuthentication();
         mAdapter.setListener(this);
         mBinding.setAdapter(mAdapter);
         mViewModel = new ViewModelProvider(this).get(SecureFolderViewModel.class);
         mViewModel.setContext(this);
-        mViewModel.load(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS));
         mViewModel.files.observe(this, files -> mAdapter.setItems(files));
+        mViewModel.authenticated.observe(this, aBoolean ->checkAuthentication(aBoolean));
+        load();
+    }
+
+    private void load() {
+        if (ContextCompat.checkSelfPermission(
+                this, Manifest.permission.READ_EXTERNAL_STORAGE) ==
+                PackageManager.PERMISSION_GRANTED) {
+            // You can use the API that requires the permission.
+            mViewModel.load(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS));
+        } else {
+            // You can directly ask for the permission.
+            // The registered ActivityResultCallback gets the result of this request.
+            requestPermissionLauncher.launch(
+                    Manifest.permission.READ_EXTERNAL_STORAGE);
+        }
     }
 
     @Override

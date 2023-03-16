@@ -1,17 +1,17 @@
 package com.brouken.player.screens.secure.view;
 
 import android.graphics.Bitmap;
-import android.media.ThumbnailUtils;
-import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.brouken.player.databinding.FileItemBinding;
+import com.brouken.player.databinding.FileItem1Binding;
+import com.brouken.player.utils.ThumbnailWrapper;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -37,7 +37,7 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.FolderView
     @NonNull
     @Override
     public FolderViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        FileItemBinding binding = FileItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        FileItem1Binding binding = FileItem1Binding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
         return new FolderViewHolder(binding);
     }
 
@@ -53,9 +53,9 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.FolderView
     }
 
     class FolderViewHolder extends RecyclerView.ViewHolder {
-        private FileItemBinding mBinding;
+        private FileItem1Binding mBinding;
 
-        public FolderViewHolder(FileItemBinding binding) {
+        public FolderViewHolder(FileItem1Binding binding) {
             super(binding.getRoot());
             mBinding = binding;
         }
@@ -64,8 +64,12 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.FolderView
             mBinding.setItem(item);
             itemView.setOnClickListener(v -> listener.onClick(item));
             if (item.isFile()) {
-                Bitmap thumb = ThumbnailUtils.createVideoThumbnail(item.getPath(), MediaStore.Images.Thumbnails.MINI_KIND);
-                mBinding.icon.setImageBitmap(thumb);
+                Bitmap thumb;
+                try {
+                    thumb = ThumbnailWrapper.createThumbnail(itemView.getContext(), item, 100, 100);
+                    mBinding.icon.setImageBitmap(thumb);
+                } catch (IOException e) {
+                }
             }
         }
     }

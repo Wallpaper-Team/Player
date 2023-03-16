@@ -25,6 +25,8 @@ public class SecureFolderViewModel extends ViewModel {
 
     private MutableLiveData<List<File>> _files = new MutableLiveData<>();
     public LiveData<List<File>> files = _files;
+    private MutableLiveData<Boolean> _authenticated = new MutableLiveData<>(false);
+    public LiveData<Boolean> authenticated = _authenticated;
     private Context mContext;
 
     @Inject
@@ -33,6 +35,10 @@ public class SecureFolderViewModel extends ViewModel {
 
     public void setContext(Context mContext) {
         this.mContext = mContext;
+    }
+
+    public void setAuthenticated(boolean authenticated) {
+        _authenticated.postValue(authenticated);
     }
 
     public void load(File file) {

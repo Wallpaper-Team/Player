@@ -70,6 +70,7 @@ android {
 
 dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation project(path: ':file-explorer')
     def media3_version = '1.0.0-rc02'
     implementation "androidx.media3:media3-session:$media3_version"
     implementation "androidx.media3:media3-datasource:$media3_version"
@@ -105,4 +106,5 @@ dependencies {
     implementation 'com.google.dagger:hilt-android:2.45'
     annotationProcessor 'com.google.dagger:hilt-compiler:2.45'
     implementation "androidx.biometric:biometric:1.1.0"
+    implementation 'com.github.axet:android-library:1.35.27'
 }

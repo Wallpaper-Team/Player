@@ -38,7 +38,7 @@ import javax.inject.Inject;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class SecureFolderActivity extends AppCompatActivity implements FolderAdapter.ItemOnClickListener {
+public class SecureFolderActivity extends AppCompatActivity {
 
     private static final String TAG = "SecureFolderActivity";
     private ActivitySecureFolderBinding mBinding;
@@ -53,6 +53,7 @@ public class SecureFolderActivity extends AppCompatActivity implements FolderAda
     private void checkAuthentication(Boolean authenticated) {
         if (authenticated) {
             Intent intent = new Intent(this, FileExActivity.class);
+//            intent.putExtra("OPEN_MODE", 2);
             startActivity(intent);
             finish();
             return;
@@ -110,7 +111,6 @@ public class SecureFolderActivity extends AppCompatActivity implements FolderAda
 
     private ActivityResultLauncher<String> requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
         if (isGranted) {
-            mViewModel.load(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS));
         } else {
             Toast.makeText(this, "Permission denied!", Toast.LENGTH_SHORT).show();
             finish();
@@ -138,25 +138,12 @@ public class SecureFolderActivity extends AppCompatActivity implements FolderAda
         super.onCreate(savedInstanceState);
         mBinding = ActivitySecureFolderBinding.inflate(getLayoutInflater());
         setContentView(mBinding.getRoot());
-        mAdapter.setListener(this);
-//        mBinding.setAdapter(mAdapter);
-        mViewModel = new ViewModelProvider(this).get(SecureFolderViewModel.class);
-        mViewModel.setContext(this);
-//        mViewModel.files.observe(this, files -> mAdapter.setItems(files));
-        mViewModel.authenticated.observe(this, aBoolean -> checkAuthentication(aBoolean));
-        load();
-    }
-
-    private void load() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-            // You can use the API that requires the permission.
-//            mViewModel.load(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS));
-
-        } else {
-            // You can directly ask for the permission.
-            // The registered ActivityResultCallback gets the result of this request.
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE);
         }
+        mViewModel = new ViewModelProvider(this).get(SecureFolderViewModel.class);
+        mViewModel.setContext(this);
+        mViewModel.authenticated.observe(this, aBoolean -> checkAuthentication(aBoolean));
     }
 
     @Override
@@ -169,11 +156,5 @@ public class SecureFolderActivity extends AppCompatActivity implements FolderAda
                 finish();
             }
         }
-    }
-
-    @Override
-    public void onClick(File item) {
-        //TODO
-        Toast.makeText(this, "Not implemented yet", Toast.LENGTH_SHORT).show();
     }
 }

@@ -112,10 +112,22 @@ public class FileExActivity extends AppCompatThemeActivity implements Navigation
     }
 
     public static String getDefault(Context context) {
+        if (mOpenMode == 1) {//secure folder
+            return getSecureFolder(context);
+        } else if (mOpenMode == 2) {//trim folder
+            return getTrimFolder(context);
+        }
         File ext = Environment.getExternalStorageDirectory();
-        if (ext == null || !Storage.permitted(context, Storage.PERMISSIONS_RO))
-            return Uri.fromFile(context.getFilesDir()).toString();
+        if (ext == null) return Uri.fromFile(context.getExternalFilesDir(null)).toString();
         else return Uri.fromFile(ext).toString();
+    }
+
+    public static String getSecureFolder(Context context) {
+        return context.getExternalFilesDir("Secure").getPath();
+    }
+
+    public static String getTrimFolder(Context context) {
+        return context.getExternalFilesDir("Trim").getPath();
     }
 
     public static class FilesTabView extends PathMax {
@@ -153,8 +165,8 @@ public class FileExActivity extends AppCompatThemeActivity implements Navigation
         public void save() {
             SharedPreferences shared = PreferenceManager.getDefaultSharedPreferences(FileExActivity.this);
             SharedPreferences.Editor editor = shared.edit();
-            editor.putString(FilesApplication.PREF_LEFT, getLeft().getUri().toString());
-            editor.putString(FilesApplication.PREF_RIGHT, getRight().getUri().toString());
+            editor.putString(FilesApplication.PREF_LEFT + mOpenMode, getLeft().getUri().toString());
+            editor.putString(FilesApplication.PREF_RIGHT + mOpenMode, getRight().getUri().toString());
             editor.commit();
         }
 
@@ -180,9 +192,10 @@ public class FileExActivity extends AppCompatThemeActivity implements Navigation
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return FilesFragment.newInstance(Uri.parse(shared.getString(FilesApplication.PREF_LEFT, getDefault(FileExActivity.this))));
+                    Uri uri = Uri.parse(shared.getString(FilesApplication.PREF_LEFT + mOpenMode, getDefault(FileExActivity.this)));
+                    return FilesFragment.newInstance(uri);
                 case 1:
-                    return FilesFragment.newInstance(Uri.parse(shared.getString(FilesApplication.PREF_RIGHT, getDefault(FileExActivity.this))));
+                    return FilesFragment.newInstance(Uri.parse(shared.getString(FilesApplication.PREF_RIGHT + mOpenMode, getDefault(FileExActivity.this))));
             }
             return null;
         }
@@ -201,9 +214,9 @@ public class FileExActivity extends AppCompatThemeActivity implements Navigation
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return Storage.getDisplayName(FileExActivity.this, getLeft().getUri()) + " "; // prevent PathMax eat last slash
+                    return Storage.getDisplayName(getLeft().getUri()) + " "; // prevent PathMax eat last slash
                 case 1:
-                    return Storage.getDisplayName(FileExActivity.this, getRight().getUri()) + " "; // prevent PathMax eat last slash
+                    return Storage.getDisplayName(getRight().getUri()) + " "; // prevent PathMax eat last slash
             }
             return null;
         }
@@ -236,7 +249,7 @@ public class FileExActivity extends AppCompatThemeActivity implements Navigation
 
                 @Override
                 public String formatStart() {
-                    return Storage.getDisplayName(context, Uri.fromFile(storage.getTrash())) + "/*";
+                    return Storage.getDisplayName(Uri.fromFile(storage.getTrash())) + "/*";
                 }
 
                 @Override
@@ -317,6 +330,12 @@ public class FileExActivity extends AppCompatThemeActivity implements Navigation
     }
 
     private ActivityFileExplorerBinding mBinding;
+    /**
+     * OpenMode = 1 ~ Secure folder
+     * OpenMode = 2 ~ Trim folder
+     * Otherwise ~ Normal mode
+     */
+    private static int mOpenMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -402,6 +421,8 @@ public class FileExActivity extends AppCompatThemeActivity implements Navigation
         }
         storage.closeSu();
 
+
+        mOpenMode = getIntent().getIntExtra("OPEN_MODE", -1);
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         mViewPager = mBinding.appBarMain.pagerContainer;
@@ -773,7 +794,7 @@ public class FileExActivity extends AppCompatThemeActivity implements Navigation
             if (f.equals(FilesApplication.getLocalTmp())) return f.getPath();
             return ".../" + f.getName();
         } else {
-            return Storage.getDisplayName(FileExActivity.this, u);
+            return Storage.getDisplayName(u);
         }
     }
 

@@ -67,7 +67,7 @@ public class Storage extends com.github.axet.androidlibrary.app.Storage {
      * 1 as filter only video
      * 2 as filter only audio
      */
-    private int fileFilterMode = 0;
+    private static int fileFilterMode = 0;
 
     public void setFileFilterMode(int fileFilterMode) {
         this.fileFilterMode = fileFilterMode;
@@ -96,30 +96,9 @@ public class Storage extends com.github.axet.androidlibrary.app.Storage {
         return ss[ss.length - 1];
     }
 
-    public static String getDisplayName(Context context, Uri uri) {
-        String d;
-        String s = uri.getScheme();
-        if (Build.VERSION.SDK_INT >= 21 && s.equals(ContentResolver.SCHEME_CONTENT)) { // SAF folder for content
-            if (uri.getAuthority().startsWith(SAF)) {
-                d = DocumentsContract.getTreeDocumentId(uri);
-                if (d.endsWith(COLON)) d = d.substring(0, d.length() - 1);
-                d += CSS;
-                if (DocumentsContract.isDocumentUri(context, uri))
-                    d += Storage.getDocumentChildPath(uri);
-            } else {
-                d = DocumentsContract.getTreeDocumentId(uri);
-                if (d.endsWith(COLON)) d = d.substring(0, d.length() - 1);
-                d += CSS;
-                d += uri.getLastPathSegment();
-            }
-        } else if (s.equals(ContentResolver.SCHEME_FILE)) { // full destionation for files
-            d = getFile(uri).getPath();
-        } else {
-            throw new UnknownUri();
-        }
-        String p = uri.getQueryParameter("p");
-        if (p != null) d += "/" + p;
-        return d;
+    public static String getDisplayName(Uri uri) {
+        String path = uri.getPath();
+        return path.substring(path.lastIndexOf('/'));
     }
 
     @TargetApi(21)

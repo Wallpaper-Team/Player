@@ -53,7 +53,9 @@ public class HomeActivity extends AppCompatActivity implements MainOptionAdapter
         mAdapter.setListener(this);
         mBinding.setAdapter(mAdapter);
         mBinding.fbt.setOnClickListener(v -> {
-            startActivity(new Intent(this, PlayerActivity.class));
+            Intent intent = new Intent(this, PlayerActivity.class);
+            intent.setData(Uri.parse("http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"));
+            startActivity(intent);
         });
     }
 
@@ -106,6 +108,7 @@ public class HomeActivity extends AppCompatActivity implements MainOptionAdapter
             case R.string.secure_folder:
                 intent = new Intent(this, SecureFolderActivity.class);
                 startActivity(intent);
+                break;
             case R.string.trim_video:
                 openTrimVideo();
                 break;

@@ -633,9 +633,9 @@ public class FilesFragment extends Fragment {
 
         public String formatStart() {
             if (calcsStart.size() == 1) {
-                return Storage.getDisplayName(context, calcsStart.get(0).uri);
+                return Storage.getDisplayName(calcsStart.get(0).uri);
             } else {
-                String str = Storage.getDisplayName(context, calcUri) + "{";
+                String str = Storage.getDisplayName(calcUri) + "{";
                 for (Storage.Node u : calcsStart)
                     str += Storage.getName(context, u.uri) + ",";
                 str = stripRight(str, ",");
@@ -645,7 +645,7 @@ public class FilesFragment extends Fragment {
         }
 
         public String formatCalc() {
-            return Storage.getDisplayName(context, files.get(files.size() - 1).uri);
+            return Storage.getDisplayName(files.get(files.size() - 1).uri);
         }
 
         public void post() {
@@ -1219,7 +1219,7 @@ public class FilesFragment extends Fragment {
                             title.setText(context.getString(R.string.files_calculating) + ": " + formatCalc());
                             update(this);
                             from.setText(context.getString(R.string.copy_from) + " " + formatStart());
-                            to.setText(context.getString(R.string.copy_to) + " " + Storage.getDisplayName(context, uri));
+                            to.setText(context.getString(R.string.copy_to) + " " + Storage.getDisplayName(uri));
                             post();
                             return;
                         }
@@ -1280,8 +1280,8 @@ public class FilesFragment extends Fragment {
                                 title.setGravity(Gravity.CENTER);
                                 title.setText(n + " " + FilesApplication.formatSize(context, a) + context.getString(R.string.per_second) + ", " + e);
                                 update(this, old, f);
-                                from.setText(context.getString(R.string.copy_from) + " " + Storage.getDisplayName(context, f.uri));
-                                to.setText(context.getString(R.string.copy_to) + " " + Storage.getDisplayName(context, oldt));
+                                from.setText(context.getString(R.string.copy_from) + " " + Storage.getDisplayName(f.uri));
+                                to.setText(context.getString(R.string.copy_to) + " " + Storage.getDisplayName(oldt));
                                 return;
                             }
                         }
@@ -1348,7 +1348,7 @@ public class FilesFragment extends Fragment {
                             title.setVisibility(View.GONE);
                             progressFile.setVisibility(View.GONE);
                             progressTotal.setVisibility(View.GONE);
-                            from.setText(context.getString(R.string.files_deleting) + ": " + Storage.getDisplayName(context, f.uri));
+                            from.setText(context.getString(R.string.files_deleting) + ": " + Storage.getDisplayName(f.uri));
                             to.setVisibility(View.GONE);
                             post();
                             return;
@@ -2523,7 +2523,7 @@ public class FilesFragment extends Fragment {
                         archive.title.setText(getString(R.string.files_calculating) + ": " + formatCalc());
                         archive.update(this);
                         archive.from.setText(getString(R.string.files_archiving) + ": " + formatStart());
-                        archive.to.setText(getString(R.string.copy_to) + Storage.getDisplayName(context, t));
+                        archive.to.setText(getString(R.string.copy_to) + Storage.getDisplayName(t));
                         post();
                         return;
                     }
@@ -2583,8 +2583,8 @@ public class FilesFragment extends Fragment {
                             archive.title.setGravity(Gravity.CENTER);
                             archive.title.setText(getString(R.string.files_archiving) + " " + FilesApplication.formatSize(context, a) + getString(R.string.per_second) + ", " + e);
                             archive.update(this, old, f);
-                            archive.from.setText(getString(R.string.copy_from) + " " + Storage.getDisplayName(context, f.uri));
-                            archive.to.setText(getString(R.string.copy_to) + " " + Storage.getDisplayName(context, oldt));
+                            archive.from.setText(getString(R.string.copy_from) + " " + Storage.getDisplayName(f.uri));
+                            archive.to.setText(getString(R.string.copy_to) + " " + Storage.getDisplayName(oldt));
                             return;
                         }
                     }
@@ -2607,7 +2607,7 @@ public class FilesFragment extends Fragment {
                         filesIndex++;
                         archive.title.setText(getString(R.string.files_archiving) + ": " + formatStart());
                         archive.update(this, old, f);
-                        archive.from.setText(Storage.getDisplayName(context, f.uri));
+                        archive.from.setText(Storage.getDisplayName(f.uri));
                         post();
                         return;
                     }

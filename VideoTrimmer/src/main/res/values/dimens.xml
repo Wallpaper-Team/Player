@@ -1,0 +1,13 @@
+<resources>
+    <dimen name="thumb_width">30dp</dimen>
+    <dimen name="thumb_height">30dp</dimen>
+
+    <dimen name="bubble_thumb_width">70dp</dimen>
+    <dimen name="bubble_thumb_height">70dp</dimen>
+    
+    <dimen name="video_thumbnail_width">320dp</dimen>
+    <dimen name="video_thumbnail_height">180</dimen>
+
+    <dimen name="recycler_view_padding">16dp</dimen>
+    <dimen name="progress_bar_size">88dp</dimen>
+</resources>

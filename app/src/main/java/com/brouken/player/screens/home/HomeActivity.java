@@ -22,6 +22,7 @@ import com.brouken.player.screens.secure.SecureFolderActivity;
 import com.brouken.player.screens.settings.SettingsActivity;
 import com.brouken.player.utils.Constants;
 import com.example.file_explorer.activities.FileExActivity;
+import com.module.trimvideo.presentation.videolist.VideoListActivity;
 
 import javax.inject.Inject;
 
@@ -105,8 +106,17 @@ public class HomeActivity extends AppCompatActivity implements MainOptionAdapter
             case R.string.secure_folder:
                 intent = new Intent(this, SecureFolderActivity.class);
                 startActivity(intent);
+            case R.string.trim_video:
+                openTrimVideo();
+                break;
             default:
                 break;
         }
+    }
+
+    // todo refactor late
+    private void openTrimVideo() {
+        Intent intent = new Intent(this, VideoListActivity.class);
+        startActivity(intent);
     }
 }

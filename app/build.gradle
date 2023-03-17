@@ -69,6 +69,7 @@ android {
 }
 
 dependencies {
+    implementation project(':VideoTrimmer')
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation project(path: ':file-explorer')
     def media3_version = '1.0.0-rc02'

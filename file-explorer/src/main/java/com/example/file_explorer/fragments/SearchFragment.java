@@ -215,9 +215,6 @@ public class SearchFragment extends FilesFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_view) {
-            Uri uri = item.getIntent().getData();
-            FileExActivity main = (FileExActivity) getActivity();
-            main.openHex(uri, false);
             return true;
         }
         if (id == R.id.action_openasfolder) {

@@ -42,4 +42,20 @@
     <string name="mediastore_empty">Không tìm thấy tệp video được lập chỉ mục. Để truy cập các tệp video trong bộ nhớ, hãy bật tính năng quét phương tiện tự động trong cài đặt hệ thống.</string>
     <string name="pref_decoder_priority">Bộ giải mã ưu tiên</string>
     <string name="video_orientation_system">Hướng thiết bị</string>
+    <string name="video_player">Trình phát video</string>
+    <string name="music_player">Trình phát nhạc</string>
+    <string name="trim_video">Cắt Video</string>
+    <string name="secure_folder">Thư mục bảo mật</string>
+    <string name="video_downloader">Video Downloader</string>
+    <string name="settings">Cài đặt</string>
+    <string name="video_player_description">Chọn video từ thư viện để phát</string>
+    <string name="music_player_description">Chọn audio từ thư viện để phát</string>
+    <string name="trim_video_description">Chọn video để chỉnh sửa cắt</string>
+    <string name="secure_folder_description">Giữ đa phương tiện của bạn bảo mật</string>
+    <string name="video_downloader_description">Nhập đường dẫn để tải video</string>
+    <string name="settings_description">Thiết lập các tùy chọn cá nhân</string>
+    <string name="request_biometric_dialog_title">Bảo mật sinh trắc học</string>
+    <string name="request_biometric_dialog_message">Hãy thiết lập bảo mật vân tay hoặc khuôn mặt</string>
+    <string name="biometric_prompt_title">Mở thử mục bảo mật</string>
+    <string name="biometric_prompt_subtitle">Mở thư mục bảo mật bằng vân tay hoặc khuôn mặt</string>
 </resources>

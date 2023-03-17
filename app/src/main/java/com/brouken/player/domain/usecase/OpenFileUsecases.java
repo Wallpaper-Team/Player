@@ -16,7 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.brouken.player.Prefs;
 import com.brouken.player.R;
 import com.brouken.player.screens.player.PlayerActivity;
-import com.brouken.player.utils.Utils;
+import com.example.file_explorer.activities.FileExActivity;
 
 import javax.inject.Inject;
 
@@ -37,22 +37,26 @@ public class OpenFileUsecases {
     }
 
     public void pickVideo() {
-        final Intent intent = createBaseFileIntent(Intent.ACTION_OPEN_DOCUMENT, null);
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.setType("video/*");
-        intent.putExtra(Intent.EXTRA_MIME_TYPES, Utils.supportedMimeTypesVideo);
-
-        if (Build.VERSION.SDK_INT < 30) {
-            final ComponentName systemComponentName = Utils.getSystemComponent(mContext, intent);
-            if (systemComponentName != null) {
-                intent.setComponent(systemComponentName);
-            }
-        }
-        safelyStartActivityForResult(intent, REQUEST_CHOOSER_VIDEO);
+//        final Intent intent = createBaseFileIntent(Intent.ACTION_OPEN_DOCUMENT, null);
+//        intent.addCategory(Intent.CATEGORY_OPENABLE);
+//        intent.setType("video/*");
+//        intent.putExtra(Intent.EXTRA_MIME_TYPES, Utils.supportedMimeTypesVideo);
+//
+//        if (Build.VERSION.SDK_INT < 30) {
+//            final ComponentName systemComponentName = Utils.getSystemComponent(mContext, intent);
+//            if (systemComponentName != null) {
+//                intent.setComponent(systemComponentName);
+//            }
+//        }
+//        safelyStartActivityForResult(intent, REQUEST_CHOOSER_VIDEO);
+        Intent intent = new Intent(mContext, FileExActivity.class);
+        intent.putExtra("FILTER_MODE", 1);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        mContext.startActivity(intent);
     }
 
     public void pickAudio() {
-        final Intent intent = createBaseFileIntent(Intent.ACTION_OPEN_DOCUMENT, null);
+        /*final Intent intent = createBaseFileIntent(Intent.ACTION_OPEN_DOCUMENT, null);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("audio/*");
         intent.putExtra(Intent.EXTRA_MIME_TYPES, Utils.supportedMimeTypesAudio);
@@ -63,7 +67,11 @@ public class OpenFileUsecases {
                 intent.setComponent(systemComponentName);
             }
         }
-        safelyStartActivityForResult(intent, REQUEST_CHOOSER_AUDIO);
+        safelyStartActivityForResult(intent, REQUEST_CHOOSER_AUDIO);*/
+        Intent intent = new Intent(mContext, FileExActivity.class);
+        intent.putExtra("FILTER_MODE", 2);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        mContext.startActivity(intent);
     }
 
     public void openFile(Uri uri) {

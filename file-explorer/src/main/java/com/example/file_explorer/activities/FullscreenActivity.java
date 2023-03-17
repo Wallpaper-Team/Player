@@ -32,7 +32,6 @@ import com.example.file_explorer.R;
 import com.example.file_explorer.app.FilesApplication;
 import com.example.file_explorer.app.Storage;
 import com.example.file_explorer.fragments.FilesFragment;
-import com.example.file_explorer.fragments.HexDialogFragment;
 import com.example.file_explorer.fragments.MediaFragment;
 
 import java.io.InputStream;
@@ -376,7 +375,6 @@ public class FullscreenActivity extends AppCompatFullscreenThemeActivity {
         left.setVisibility(nodes.size() > 1 ? View.VISIBLE : View.GONE);
         right.setVisibility(nodes.size() > 1 ? View.VISIBLE : View.GONE);
         count.setVisibility(nodes.size() > 1 ? View.VISIBLE : View.GONE);
-        sendBroadcast(new Intent(HexDialogFragment.CHANGED).putExtra("uri", uri));
     }
 
     @Override

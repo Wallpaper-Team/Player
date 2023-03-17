@@ -52,6 +52,14 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.file_explorer.R;
+import com.example.file_explorer.activities.FileExActivity;
+import com.example.file_explorer.activities.FullscreenActivity;
+import com.example.file_explorer.app.FilesApplication;
+import com.example.file_explorer.app.Storage;
+import com.example.file_explorer.app.SuperUser;
+import com.example.file_explorer.services.StorageProvider;
+import com.example.file_explorer.widgets.PathView;
 import com.github.axet.androidlibrary.app.MountInfo;
 import com.github.axet.androidlibrary.crypto.MD5;
 import com.github.axet.androidlibrary.preferences.OptimizationPreferenceCompat;
@@ -61,18 +69,9 @@ import com.github.axet.androidlibrary.widgets.ErrorDialog;
 import com.github.axet.androidlibrary.widgets.InvalidateOptionsMenuCompat;
 import com.github.axet.androidlibrary.widgets.OpenChoicer;
 import com.github.axet.androidlibrary.widgets.OpenFileDialog;
-import com.github.axet.androidlibrary.widgets.ThemeUtils;
 import com.github.axet.androidlibrary.widgets.Toast;
 import com.github.axet.androidlibrary.widgets.ToolbarActionView;
 import com.github.axet.androidlibrary.widgets.TopSnappedSmoothScroller;
-import com.example.file_explorer.R;
-import com.example.file_explorer.activities.FullscreenActivity;
-import com.example.file_explorer.activities.FileExActivity;
-import com.example.file_explorer.app.FilesApplication;
-import com.example.file_explorer.app.Storage;
-import com.example.file_explorer.app.SuperUser;
-import com.example.file_explorer.services.StorageProvider;
-import com.example.file_explorer.widgets.PathView;
 import com.github.axet.wget.SpeedInfo;
 
 import org.apache.commons.io.IOUtils;
@@ -1611,6 +1610,13 @@ public class FilesFragment extends Fragment {
             return new Holder(LayoutInflater.from(getContext()).inflate(R.layout.file_item, parent, false));
         }
 
+        private void openFileMedia(Uri uri) {
+            final Intent intent = new Intent("com.ducky.videoplayer.dk.VIEW");
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.putExtra("Uri", uri.getPath());
+            getContext().getApplicationContext().sendBroadcast(intent);
+        }
+
         @Override
         public void onBindViewHolder(final Holder h, final int position) {
             final Storage.Node f = files.get(position);
@@ -1637,48 +1643,17 @@ public class FilesFragment extends Fragment {
                 h.date.setText(SIMPLE.format(f.last));
             }
             h.name.setText(f.name);
-            h.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (MenuItemCompat.isActionViewExpanded(toolbar)) {
-                        if (selected.contains(f.uri)) selected.remove(f.uri);
-                        else selected.add(f);
-                        updateSelection();
-                        return;
-                    }
-                    if (dir) {
-                        load(f.uri, false);
-                    } else {
-                        PopupMenu menu = new PopupMenu(getContext(), v);
-                        menu.inflate(R.menu.menu_file);
-                        Storage.ArchiveReader r = storage.fromArchive(f.uri, true);
-                        try {
-                            if (r != null && r.isDirectory()) {
-                                ToolbarActionView.hideMenu(menu.getMenu(), R.id.action_view);
-                                ToolbarActionView.hideMenu(menu.getMenu(), R.id.action_openaspicture);
-                                r.close();
-                            } else if (CacheImagesAdapter.isImage(Storage.getName(getContext(), f.uri))) {
-                                ToolbarActionView.hideMenu(menu.getMenu(), R.id.action_view);
-                                ToolbarActionView.hideMenu(menu.getMenu(), R.id.action_openasarchive);
-                            } else {
-                                ToolbarActionView.hideMenu(menu.getMenu(), R.id.action_openasarchive);
-                                ToolbarActionView.hideMenu(menu.getMenu(), R.id.action_openaspicture);
-                            }
-                        } catch (Throwable e) {
-                            Toast.Error(getContext(), e);
-                        }
-                        ToolbarActionView.hideMenu(menu.getMenu(), R.id.action_openasfolder);
-                        menu.setOnMenuItemClickListener(item -> {
-                            Intent intent = new Intent(Intent.ACTION_VIEW);
-                            String type = Storage.getTypeByName(f.name);
-                            intent.setDataAndType(f.uri, type);
-                            intent.putExtra("name", f.name);
-                            item.setIntent(intent);
-                            return onOptionsItemSelected(item);
-                        });
-                        menu.show();
-                        storage.closeSu();
-                    }
+            h.itemView.setOnClickListener(v -> {
+                if (MenuItemCompat.isActionViewExpanded(toolbar)) {
+                    if (selected.contains(f.uri)) selected.remove(f.uri);
+                    else selected.add(f);
+                    updateSelection();
+                    return;
+                }
+                if (dir) {
+                    load(f.uri, false);
+                } else {
+                    openFileMedia(f.uri);
                 }
             });
             h.itemView.setOnLongClickListener(v -> {
@@ -2213,13 +2188,6 @@ public class FilesFragment extends Fragment {
             }
             return true;
         } else if (id == R.id.action_view) {
-            try {
-                Uri uri = item.getIntent().getData();
-                FileExActivity main = (FileExActivity) getActivity();
-                main.openHex(uri, true);
-            } finally {
-                storage.closeSu();
-            }
             return true;
         } else if (id == R.id.action_openasimage) {
             Intent intent = item.getIntent();

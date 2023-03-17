@@ -36,6 +36,7 @@ import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.Rational;
 import android.util.TypedValue;
 import android.view.HapticFeedbackConstants;

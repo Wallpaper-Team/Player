@@ -1,5 +1,8 @@
 package com.example.file_explorer.app;
 
+import static com.github.axet.androidlibrary.widgets.CacheImagesAdapter.isAudio;
+import static com.github.axet.androidlibrary.widgets.CacheImagesAdapter.isVideo;
+
 import android.annotation.TargetApi;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -53,6 +56,22 @@ public class Storage extends com.github.axet.androidlibrary.app.Storage {
     public static final SAFCaches<FilesFragment> SAF_CACHE = new SAFCaches<>();
 
     SuperUser.SuIO su;
+
+    private static final NodeFilter NODE_FILTER = n -> n.dir || isVideo(n.name) || isAudio(n.name);
+    private static final NodeFilter NODE_FILTER_VIDEO = n -> n.dir || isVideo(n.name);
+    private static final NodeFilter NODE_FILTER_AUDIO = n -> n.dir || isAudio(n.name);
+
+    /**
+     * file filter mode
+     * 0 as filter audio and video
+     * 1 as filter only video
+     * 2 as filter only audio
+     */
+    private int fileFilterMode = 0;
+
+    public void setFileFilterMode(int fileFilterMode) {
+        this.fileFilterMode = fileFilterMode;
+    }
 
     public static Uri getParent(Context context, Uri uri) {
         String p = uri.getQueryParameter("p");
@@ -771,7 +790,17 @@ public class Storage extends com.github.axet.androidlibrary.app.Storage {
             }
             return files;
         }
-        return super.list(context, uri);
+        return super.list(context, uri, getNodeFilter());
+    }
+
+    private NodeFilter getNodeFilter() {
+        if (fileFilterMode == 1) {
+            return NODE_FILTER_VIDEO;
+        }
+        if (fileFilterMode == 2) {
+            return NODE_FILTER_AUDIO;
+        }
+        return NODE_FILTER;
     }
 
     public ArrayList<Node> walk(Uri root, Uri uri) {
@@ -789,7 +818,7 @@ public class Storage extends com.github.axet.androidlibrary.app.Storage {
             }
             return files;
         }
-        return super.walk(context, root, uri);
+        return super.walk(context, root, uri, getNodeFilter());
     }
 
     public boolean symlink(SymlinkNode f, Uri uri) {

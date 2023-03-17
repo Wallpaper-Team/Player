@@ -37,7 +37,6 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.appcompat.widget.PopupMenu;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.core.view.MenuItemCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -48,7 +47,6 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.example.file_explorer.databinding.ActivityFileExplorerBinding;
 import com.github.axet.androidlibrary.activities.AppCompatThemeActivity;
-import com.github.axet.androidlibrary.preferences.AboutPreferenceCompat;
 import com.github.axet.androidlibrary.widgets.ErrorDialog;
 import com.github.axet.androidlibrary.widgets.OpenChoicer;
 import com.github.axet.androidlibrary.widgets.OpenFileDialog;
@@ -61,7 +59,6 @@ import com.example.file_explorer.app.FilesApplication;
 import com.example.file_explorer.app.Storage;
 import com.example.file_explorer.app.SuperUser;
 import com.example.file_explorer.fragments.FilesFragment;
-import com.example.file_explorer.fragments.HexDialogFragment;
 import com.example.file_explorer.fragments.SearchFragment;
 import com.example.file_explorer.services.StorageProvider;
 import com.google.android.material.internal.NavigationMenuItemView;
@@ -388,8 +385,10 @@ public class FileExActivity extends AppCompatThemeActivity implements Navigation
         });
 
         app = FilesApplication.from(this);
-
         storage = new Storage(this);
+        int filterMode = getIntent().getIntExtra("FILTER_MODE", 0);
+        Log.d("Ducky", "onNewIntent: FilterMode = " + filterMode);
+        storage.setFileFilterMode(filterMode);
         if (storage.getRoot()) {
             if (!SuperUser.sudoTest(this)) { // run once per app restart, only when user already enabled root
                 SharedPreferences shared = PreferenceManager.getDefaultSharedPreferences(this);
@@ -617,10 +616,6 @@ public class FileExActivity extends AppCompatThemeActivity implements Navigation
         return true;
     }
 
-    public void openHex(Uri uri, boolean panel) {
-        HexDialogFragment d = HexDialogFragment.create(uri, panel);
-        d.show(getSupportFragmentManager(), "");
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

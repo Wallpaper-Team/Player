@@ -18,6 +18,7 @@ import com.brouken.player.screens.player.PlayerActivity;
 import com.brouken.player.databinding.ActivityHomeBinding;
 import com.brouken.player.screens.home.view.MainOptionAdapter;
 import com.brouken.player.screens.home.viewmodel.HomeViewModel;
+import com.brouken.player.screens.secure.SecureFolderActivity;
 import com.brouken.player.screens.settings.SettingsActivity;
 import com.brouken.player.utils.Constants;
 import com.example.file_explorer.activities.FileExActivity;
@@ -102,7 +103,7 @@ public class HomeActivity extends AppCompatActivity implements MainOptionAdapter
                 mUsecases.pickAudio();
                 break;
             case R.string.secure_folder:
-                intent = new Intent(this, FileExActivity.class);
+                intent = new Intent(this, SecureFolderActivity.class);
                 startActivity(intent);
             default:
                 break;

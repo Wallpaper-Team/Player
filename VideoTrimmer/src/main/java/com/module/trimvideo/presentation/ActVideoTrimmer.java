@@ -576,9 +576,12 @@ public class ActVideoTrimmer extends LocalizationActivity {
                 Toast.makeText(ActVideoTrimmer.this, "Failed to trim", Toast.LENGTH_SHORT).show();
             }
         });
-        mTrimVideoOperator.invoke(uri.getPath(), FileUtils.getTrimmedVideoPath(getApplicationContext(), "small_video/trimmedVideo",
-                        "trimmedVideo_"), FileUtils.getTrimmedPath(getApplicationContext(), "Trimmed",
-                        "filterVideo_"), start, end);
+
+        // can be save to cache with path: FileUtils.getTrimmedVideoPath(getApplicationContext(), "trimmedVideo",
+        //                        "trimmedVideo_")
+        mTrimVideoOperator.invoke(uri.getPath(), FileUtils.getTrimmedPath(getApplicationContext(), "trimmedVideo",
+                "trimmedVideo_"), FileUtils.getTrimmedPath(getApplicationContext(), "Trimmed",
+                "filterVideo_"), start, end);
     }
     private String getFileName() {
         String path = getExternalFilesDir("TrimmedVideo").getPath();

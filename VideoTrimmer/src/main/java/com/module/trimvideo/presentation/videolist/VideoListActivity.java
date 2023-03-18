@@ -48,6 +48,10 @@ public class VideoListActivity extends AppCompatActivity  implements OnClickHand
                 if (result.getData() != null && result.getData().hasExtra(TrimVideoUtil.TRIMMED_VIDEO_PATH)) {
                     String path = result.getData().getStringExtra(TrimVideoUtil.TRIMMED_VIDEO_PATH);
                     Toast.makeText(getApplicationContext(), "Video saved with path: " + path, Toast.LENGTH_LONG).show();
+                    /* This block for test trimmer video
+                    TrimVideoUtil.activity(path)
+                            .setCompressOption(new CompressOption()) //pass empty constructor for default compress option
+                            .start(this, this.videoTrimResultLauncher);*/
                 }
             });
 

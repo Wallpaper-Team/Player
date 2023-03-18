@@ -70,4 +70,7 @@
     <string name="request_biometric_dialog_message">Please set up biometric for enable  secure folder, do you agree?</string>
     <string name="biometric_prompt_title">Biometric for open secure folder</string>
     <string name="biometric_prompt_subtitle">Open securefolder by using your biometric credential</string>
+    <string name="download">Download</string>
+    <string name="example_url">Ex: \"http://videos-bucket/sample/BigBuckBunny.mp4\"</string>
+    <string name="video_example_uri">http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4</string>
 </resources>

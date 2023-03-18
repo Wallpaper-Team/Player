@@ -6,7 +6,10 @@ import static com.brouken.player.utils.Constants.CONTENTTYPE_OGG;
 import static com.brouken.player.utils.Constants.CONTENTTYPE_OPUS;
 import static com.brouken.player.utils.Constants.CONTENTTYPE_RAR;
 
+import android.content.Context;
 import android.webkit.MimeTypeMap;
+
+import java.io.File;
 
 public class FileUtils {
 
@@ -56,4 +59,7 @@ public class FileUtils {
         return type;
     }
 
+    public static File getFolderDownload(Context context) {
+        return context.getExternalFilesDir("Download");
+    }
 }

@@ -58,4 +58,5 @@
     <string name="request_biometric_dialog_message">Hãy thiết lập bảo mật vân tay hoặc khuôn mặt</string>
     <string name="biometric_prompt_title">Mở thử mục bảo mật</string>
     <string name="biometric_prompt_subtitle">Mở thư mục bảo mật bằng vân tay hoặc khuôn mặt</string>
+    <string name="download">Tải xuống</string>
 </resources>

@@ -55,7 +55,7 @@ public class HomeActivity extends AppCompatActivity implements MainOptionAdapter
         mBinding.setAdapter(mAdapter);
         mBinding.fbt.setOnClickListener(v -> {
             Intent intent = new Intent(this, PlayerActivity.class);
-            intent.setData(Uri.parse("http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"));
+            intent.setData(Uri.parse(getString(R.string.video_example_uri)));
             startActivity(intent);
         });
     }

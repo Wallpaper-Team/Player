@@ -45,7 +45,14 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.file_explorer.R;
+import com.example.file_explorer.app.FilesApplication;
+import com.example.file_explorer.app.Storage;
+import com.example.file_explorer.app.SuperUser;
 import com.example.file_explorer.databinding.ActivityFileExplorerBinding;
+import com.example.file_explorer.fragments.FilesFragment;
+import com.example.file_explorer.fragments.SearchFragment;
+import com.example.file_explorer.services.StorageProvider;
 import com.github.axet.androidlibrary.activities.AppCompatThemeActivity;
 import com.github.axet.androidlibrary.widgets.ErrorDialog;
 import com.github.axet.androidlibrary.widgets.OpenChoicer;
@@ -54,13 +61,6 @@ import com.github.axet.androidlibrary.widgets.PathMax;
 import com.github.axet.androidlibrary.widgets.SearchView;
 import com.github.axet.androidlibrary.widgets.ThemeUtils;
 import com.github.axet.androidlibrary.widgets.Toast;
-import com.example.file_explorer.R;
-import com.example.file_explorer.app.FilesApplication;
-import com.example.file_explorer.app.Storage;
-import com.example.file_explorer.app.SuperUser;
-import com.example.file_explorer.fragments.FilesFragment;
-import com.example.file_explorer.fragments.SearchFragment;
-import com.example.file_explorer.services.StorageProvider;
 import com.google.android.material.internal.NavigationMenuItemView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
@@ -406,7 +406,6 @@ public class FileExActivity extends AppCompatThemeActivity implements Navigation
         app = FilesApplication.from(this);
         storage = new Storage(this);
         int filterMode = getIntent().getIntExtra("FILTER_MODE", 0);
-        Log.d("Ducky", "onNewIntent: FilterMode = " + filterMode);
         storage.setFileFilterMode(filterMode);
         if (storage.getRoot()) {
             if (!SuperUser.sudoTest(this)) { // run once per app restart, only when user already enabled root

@@ -48,6 +48,9 @@
         tools:replace="name, allowBackup, theme"
         tools:targetApi="n">
         <activity
+            android:name=".screens.video_downloader.VideoDownloaderActivity"
+            android:exported="false" />
+        <activity
             android:name=".screens.secure.SecureFolderActivity"
             android:exported="false" />
         <activity

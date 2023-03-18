@@ -11,4 +11,5 @@ public class Constants {
     public static final String CONTENTTYPE_FB2 = "application/x-fictionbook";
     public static final String CONTENTTYPE_XRAR = "application/x-rar-compressed";
     public static final String CONTENTTYPE_RAR = "application/rar";
+    public static final int REQUEST_PERMISSIONS = 11231;
 }

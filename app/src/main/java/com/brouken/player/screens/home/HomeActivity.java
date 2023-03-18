@@ -20,6 +20,7 @@ import com.brouken.player.screens.home.view.MainOptionAdapter;
 import com.brouken.player.screens.home.viewmodel.HomeViewModel;
 import com.brouken.player.screens.secure.SecureFolderActivity;
 import com.brouken.player.screens.settings.SettingsActivity;
+import com.brouken.player.screens.video_downloader.VideoDownloaderActivity;
 import com.brouken.player.utils.Constants;
 import com.example.file_explorer.activities.FileExActivity;
 import com.module.trimvideo.presentation.videolist.VideoListActivity;
@@ -112,9 +113,18 @@ public class HomeActivity extends AppCompatActivity implements MainOptionAdapter
             case R.string.trim_video:
                 openTrimVideo();
                 break;
+            case R.string.video_downloader:
+                openVideoDownloader();
+                break;
             default:
                 break;
         }
+    }
+
+
+    private void openVideoDownloader() {
+        Intent intent = new Intent(this, VideoDownloaderActivity.class);
+        startActivity(intent);
     }
 
     // todo refactor late

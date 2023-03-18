@@ -88,7 +88,6 @@ public class PathView extends HorizontalScrollView {
     void add(Uri uri) {
         int p15 = ThemeUtils.dp2px(getContext(), 15);
         int p10 = ThemeUtils.dp2px(getContext(), 10);
-        Log.d("Ducky", "add: " + uri.getPath());
         while (uri != null) {
             AppCompatTextView b = new AppCompatTextView(getContext());
             b.setPadding(p10, p15, p10, p15);

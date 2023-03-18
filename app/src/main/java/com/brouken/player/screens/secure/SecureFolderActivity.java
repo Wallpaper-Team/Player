@@ -6,34 +6,27 @@ import static androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTI
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.Settings;
 import android.util.Log;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.biometric.BiometricManager;
 import androidx.biometric.BiometricPrompt;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.brouken.player.R;
 import com.brouken.player.databinding.ActivitySecureFolderBinding;
-import com.brouken.player.screens.secure.view.FolderAdapter;
-import com.brouken.player.screens.secure.viewmodel.SecureFolderViewModel;
 import com.brouken.player.utils.Constants;
 import com.example.file_explorer.activities.FileExActivity;
 
-import java.io.File;
 import java.util.concurrent.Executor;
-
-import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -46,14 +39,10 @@ public class SecureFolderActivity extends AppCompatActivity {
     private BiometricPrompt biometricPrompt;
     private BiometricPrompt.PromptInfo promptInfo;
 
-    @Inject
-    FolderAdapter mAdapter;
-    private SecureFolderViewModel mViewModel;
-
     private void checkAuthentication(Boolean authenticated) {
         if (authenticated) {
             Intent intent = new Intent(this, FileExActivity.class);
-//            intent.putExtra("OPEN_MODE", 2);
+            //intent.putExtra("OPEN_MODE", 1);
             startActivity(intent);
             finish();
             return;
@@ -93,7 +82,7 @@ public class SecureFolderActivity extends AppCompatActivity {
             @Override
             public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
                 super.onAuthenticationSucceeded(result);
-                mViewModel.setAuthenticated(true);
+                checkAuthentication(true);
                 Toast.makeText(getApplicationContext(), "Authentication succeeded!", Toast.LENGTH_SHORT).show();
             }
 
@@ -108,14 +97,6 @@ public class SecureFolderActivity extends AppCompatActivity {
         promptInfo = new BiometricPrompt.PromptInfo.Builder().setTitle(getString(R.string.biometric_prompt_title)).setSubtitle(getString(R.string.biometric_prompt_subtitle)).setAllowedAuthenticators(BIOMETRIC_STRONG | DEVICE_CREDENTIAL).setConfirmationRequired(false).build();
         biometricPrompt.authenticate(promptInfo);
     }
-
-    private ActivityResultLauncher<String> requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
-        if (isGranted) {
-        } else {
-            Toast.makeText(this, "Permission denied!", Toast.LENGTH_SHORT).show();
-            finish();
-        }
-    });
 
     private void showDialogToRequestBiometric() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -138,12 +119,32 @@ public class SecureFolderActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         mBinding = ActivitySecureFolderBinding.inflate(getLayoutInflater());
         setContentView(mBinding.getRoot());
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE);
+        boolean permissionsGranted = checkStoragePermission();
+        if (permissionsGranted) {
+            checkAuthentication();
         }
-        mViewModel = new ViewModelProvider(this).get(SecureFolderViewModel.class);
-        mViewModel.setContext(this);
-        mViewModel.authenticated.observe(this, aBoolean -> checkAuthentication(aBoolean));
+    }
+
+    private void checkAuthentication() {
+        checkAuthentication(false);
+    }
+
+    private boolean checkStoragePermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            return checkPermission(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.ACCESS_MEDIA_LOCATION);
+        } else return checkPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
+
+    }
+
+    private boolean checkPermission(String... permissions) {
+        boolean allPermitted = false;
+        for (String permission : permissions) {
+            allPermitted = (ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED);
+            if (!allPermitted) break;
+        }
+        if (allPermitted) return true;
+        ActivityCompat.requestPermissions(this, permissions, Constants.REQUEST_PERMISSIONS);
+        return false;
     }
 
     @Override
@@ -153,6 +154,19 @@ public class SecureFolderActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 authenticate();
             } else {
+                finish();
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == Constants.REQUEST_PERMISSIONS) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                checkAuthentication();
+            } else {
+                Toast.makeText(this, "It is not available when permissions not granted!", Toast.LENGTH_SHORT).show();
                 finish();
             }
         }

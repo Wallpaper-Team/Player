@@ -579,7 +579,7 @@ public class ActVideoTrimmer extends LocalizationActivity {
 
         // can be save to cache with path: FileUtils.getTrimmedVideoPath(getApplicationContext(), "trimmedVideo",
         //                        "trimmedVideo_")
-        mTrimVideoOperator.invoke(uri.getPath(), FileUtils.getTrimmedPath(getApplicationContext(), "trimmedVideo",
+        mTrimVideoOperator.invoke(uri.getPath(), FileUtils.getSDCardStore(getApplicationContext(), "trimmedVideo",
                 "trimmedVideo_"), FileUtils.getTrimmedPath(getApplicationContext(), "Trimmed",
                 "filterVideo_"), start, end);
     }

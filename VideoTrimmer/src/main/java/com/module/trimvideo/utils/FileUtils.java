@@ -22,8 +22,8 @@ import java.util.Locale;
 
 public class FileUtils {
 
-    public static String getRealPath(Context context,Uri uri) {
-        String[] projection = { MediaStore.Video.Media.DATA };
+    public static String getRealPath(Context context, Uri uri) {
+        String[] projection = {MediaStore.Video.Media.DATA};
 
         Uri collection;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -35,16 +35,16 @@ public class FileUtils {
 
         int column_index = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATA);
         cursor.moveToFirst();
-        String path=cursor.getString(column_index);
+        String path = cursor.getString(column_index);
         cursor.close();
-        if(path==null)
+        if (path == null)
             return FileUtils.getPath(context, uri);
         return path;
     }
 
     @SuppressLint("NewApi")
     public static String getPath(Context context, final Uri uri) {
-        boolean isKitkatOrAbove=Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
+        boolean isKitkatOrAbove = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
         String selection = null;
         String[] selectionArgs = null;
         if (isKitkatOrAbove) {
@@ -72,8 +72,7 @@ public class FileUtils {
                                 return path;
                             }
                         }
-                    }
-                    finally {
+                    } finally {
                         if (cursor != null)
                             cursor.close();
                     }
@@ -98,18 +97,16 @@ public class FileUtils {
                             }
                         }
                     }
-                }
-                else {
+                } else {
                     final String id = DocumentsContract.getDocumentId(uri);
-                    Uri contentUri=null;
+                    Uri contentUri = null;
                     if (id.startsWith("raw:")) {
                         return id.replaceFirst("raw:", "");
                     }
                     try {
                         contentUri = ContentUris.withAppendedId(
                                 Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
-                    }
-                    catch (NumberFormatException e) {
+                    } catch (NumberFormatException e) {
                         e.printStackTrace();
                     }
                     if (contentUri != null) {
@@ -138,11 +135,11 @@ public class FileUtils {
             }
 
             if (isGoogleDriveUri(uri)) {
-                return getDriveFilePath(context,uri);
+                return getDriveFilePath(context, uri);
             }
 
-            if(isWhatsAppFile(uri)){
-                return getFilePathForWhatsApp(context,uri);
+            if (isWhatsAppFile(uri)) {
+                return getFilePathForWhatsApp(context, uri);
             }
 
 
@@ -152,16 +149,13 @@ public class FileUtils {
                     return uri.getLastPathSegment();
                 }
                 if (isGoogleDriveUri(uri)) {
-                    return getDriveFilePath(context,uri);
+                    return getDriveFilePath(context, uri);
                 }
-                if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
-                {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                     // return getFilePathFromURI(context,uri);
-                    return copyFileToInternalStorage(context,uri,"");
+                    return copyFileToInternalStorage(context, uri, "");
                     // return getRealPathFromURI(context,uri);
-                }
-                else
-                {
+                } else {
                     return getDataColumn(context, uri, null, null);
                 }
 
@@ -169,11 +163,10 @@ public class FileUtils {
             if ("file".equalsIgnoreCase(uri.getScheme())) {
                 return uri.getPath();
             }
-        }
-        else {
+        } else {
 
-            if(isWhatsAppFile(uri)){
-                return getFilePathForWhatsApp(context,uri);
+            if (isWhatsAppFile(uri)) {
+                return getFilePathForWhatsApp(context, uri);
             }
 
             if ("content".equalsIgnoreCase(uri.getScheme())) {
@@ -231,7 +224,7 @@ public class FileUtils {
         return fullPath;
     }
 
-    private static String getDriveFilePath(Context context,Uri uri) {
+    private static String getDriveFilePath(Context context, Uri uri) {
         Uri returnUri = uri;
         Cursor returnCursor = context.getContentResolver().query(returnUri, null, null, null, null);
         /*
@@ -276,10 +269,10 @@ public class FileUtils {
      * @param newDirName if you want to create a directory, you can set this variable
      * @return
      */
-    public static String copyFileToInternalStorage(Context context,Uri uri,String newDirName) {
+    public static String copyFileToInternalStorage(Context context, Uri uri, String newDirName) {
         Uri returnUri = uri;
         Cursor returnCursor = context.getContentResolver().query(returnUri, new String[]{
-                OpenableColumns.DISPLAY_NAME,OpenableColumns.SIZE
+                OpenableColumns.DISPLAY_NAME, OpenableColumns.SIZE
         }, null, null, null);
 
         /*
@@ -294,14 +287,13 @@ public class FileUtils {
         String size = (Long.toString(returnCursor.getLong(sizeIndex)));
 
         File output;
-        if(!newDirName.equals("")) {
+        if (!newDirName.equals("")) {
             File dir = new File(context.getFilesDir() + "/" + newDirName);
             if (!dir.exists()) {
                 dir.mkdir();
             }
             output = new File(context.getFilesDir() + "/" + newDirName + "/" + name);
-        }
-        else{
+        } else {
             output = new File(context.getFilesDir() + "/" + name);
         }
         try {
@@ -317,8 +309,7 @@ public class FileUtils {
             inputStream.close();
             outputStream.close();
             returnCursor.close();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
 
             Log.e("Exception", e.getMessage());
         }
@@ -326,8 +317,8 @@ public class FileUtils {
         return output.getPath();
     }
 
-    private static String getFilePathForWhatsApp(Context context,Uri uri){
-        return  copyFileToInternalStorage(context,uri,"");
+    private static String getFilePathForWhatsApp(Context context, Uri uri) {
+        return copyFileToInternalStorage(context, uri, "");
     }
 
     private static String getDataColumn(Context context, Uri uri, String selection, String[] selectionArgs) {
@@ -343,8 +334,7 @@ public class FileUtils {
                 final int index = cursor.getColumnIndexOrThrow(column);
                 return cursor.getString(index);
             }
-        }
-        finally {
+        } finally {
             if (cursor != null)
                 cursor.close();
         }
@@ -368,7 +358,7 @@ public class FileUtils {
         return "com.google.android.apps.photos.content".equals(uri.getAuthority());
     }
 
-    public static boolean isWhatsAppFile(Uri uri){
+    public static boolean isWhatsAppFile(Uri uri) {
         return "com.whatsapp.provider.media".equals(uri.getAuthority());
     }
 
@@ -378,25 +368,25 @@ public class FileUtils {
 
     public static void getAllVideos(Context context) {
         Uri returnUri;
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
-            returnUri= MediaStore.Video.Media.getContentUri(MediaStore.VOLUME_EXTERNAL);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+            returnUri = MediaStore.Video.Media.getContentUri(MediaStore.VOLUME_EXTERNAL);
         else
-            returnUri=MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+            returnUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
 
-        Cursor cursor= context.getContentResolver().query(
-                returnUri,new String[]{
+        Cursor cursor = context.getContentResolver().query(
+                returnUri, new String[]{
                         MediaStore.Video.Media._ID,
                         MediaStore.Video.Media.DISPLAY_NAME,
                         MediaStore.Video.Media.WIDTH,
                         MediaStore.Video.Media.HEIGHT,
-                },null,null,null);
+                }, null, null, null);
 
         int idColumn = cursor.getColumnIndexOrThrow(MediaStore.Video.Media._ID);
         int displayNameColumn = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DISPLAY_NAME);
         int widthColumn = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.WIDTH);
         int heightColumn = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.HEIGHT);
 
-        while (cursor.moveToNext()){
+        while (cursor.moveToNext()) {
             long id = cursor.getLong(idColumn);
             String displayName = cursor.getString(displayNameColumn);
             int width = cursor.getInt(widthColumn);
@@ -405,11 +395,17 @@ public class FileUtils {
                     MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
                     id
             );
-            LogMessage.v("Video "+displayName+"  contentUri "+contentUri);
+            LogMessage.v("Video " + displayName + "  contentUri " + contentUri);
         }
     }
 
-
+    /**
+     * Save file to Cache
+     * @param context
+     * @param dirName
+     * @param fileNamePrefix
+     * @return cache path
+     */
     public static String getTrimmedVideoPath(Context context, String dirName, String fileNamePrefix) {
         String finalPath = "";
         String dirPath = "";
@@ -430,6 +426,14 @@ public class FileUtils {
         return finalPath;
     }
 
+    /**
+     * Save file to External storage
+     * @param context
+     * @param dirName
+     * @param fileNamePrefix
+     * @return external file path
+     */
+
     public static String getTrimmedPath(Context context, String dirName, String fileNamePrefix) {
         if (!isExternalStorageAvailable() || isExternalStorageReadOnly()) {
             return getTrimmedVideoPath(context, dirName, fileNamePrefix);
@@ -441,6 +445,27 @@ public class FileUtils {
 
             return file.getAbsolutePath();
         }
+    }
+
+    /**
+     * Save file to /storage/emulated/0/Movies/
+     * @param context
+     * @param dirName
+     * @param fileNamePrefix
+     * @return /storage/emulated/0/Movies/dirName/fileNamePrefix date.mp4
+     */
+    public static String getSDCardStore(Context context, String dirName, String fileNamePrefix) {
+        if (!isExternalStorageAvailable() || isExternalStorageReadOnly()) {
+            return getTrimmedVideoPath(context, dirName, fileNamePrefix);
+        }
+        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES) + "/" + dirName);
+        if (!file.exists()) {
+            file.mkdirs();;
+        }
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault())
+                .format(new Date());
+        String outFile = file.getPath() + "/" + fileNamePrefix + timeStamp + ".mp4";
+        return outFile;
     }
 
     private static boolean isExternalStorageReadOnly() {

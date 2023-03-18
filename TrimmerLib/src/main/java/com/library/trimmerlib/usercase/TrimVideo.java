@@ -1,7 +1,6 @@
 package com.library.trimmerlib.usercase;
 
 import android.util.Log;
-import android.widget.Toast;
 
 import com.coremedia.iso.boxes.Container;
 import com.googlecode.mp4parser.authoring.Movie;
@@ -40,7 +39,7 @@ public class TrimVideo {
         mCallback = null;
     }
 
-    public void invoke(final String src, final String dest_temp, final String dest, final double startSec, final double endSec) {
+    public void invoke(final String src, final String dest_trimmer, final String dest_filter, final double startSec, final double endSec) {
         mExecutorManager.getWorkExecutor().execute(() -> {
 
             try {
@@ -124,7 +123,7 @@ public class TrimVideo {
                     movie.addTrack(new CroppedTrack(track, startSample, endSample));
 
                     Container out = new DefaultMp4Builder().build(movie);
-                    FileOutputStream fos = new FileOutputStream(String.format(dest_temp));
+                    FileOutputStream fos = new FileOutputStream(String.format(dest_trimmer));
                     FileChannel fc = fos.getChannel();
                     out.writeContainer(fc);
 
@@ -132,11 +131,11 @@ public class TrimVideo {
                     fos.close();
                 }
 
-                /*mExecutorManager.getMainExecutor().execute(() -> {
-                    if (mCallback != null) mCallback.onSuccess(dest);
-                });*/
+                mExecutorManager.getMainExecutor().execute(() -> {
+                    if (mCallback != null) mCallback.onSuccess(dest_trimmer);
+                });
 
-                startMediaCodec(dest_temp, dest);
+                //startMediaCodec(dest_trimmer, dest_filter);
 
             } catch (Exception e) {
                 mExecutorManager.getMainExecutor().execute(() -> {
